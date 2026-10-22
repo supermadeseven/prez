@@ -1,0 +1,527 @@
+[
+  {
+    "id": "01_rajendra_prasad",
+    "name": "Dr. Rajendra Prasad",
+    "year": "1950",
+    "term": "1950 – 1962",
+    "duration": 12,
+    "x": 0,
+    "y": 0,
+    "tagline": "The Constitutional Architect & Republic Pioneer",
+    "subtleElement": "Holding rolled parchment of the 1950 Constitution",
+    "b1": {
+      "tag": "📜 Sovereign Preamble",
+      "desc": "Presided over Constituent Assembly and signed the 1950 Republic Constitution."
+    },
+    "b2": {
+      "tag": "🏛️ 12-Year Tenure",
+      "desc": "Only President to serve two full terms; established non-partisan conventions."
+    },
+    "audioUrl": "assets/audio/01_rajendra_prasad.mp3",
+    "imageUrl": "assets/images/01_rajendra_prasad.png",
+    "bgImageUrl": "assets/images/01_rajendra_prasad_bg.png",
+    "bgMeta": {
+      "title": "Rashtrapati Bhavan Central Colonnade & Plinth",
+      "position": {
+        "bottom": "35px",
+        "left": "50%",
+        "transform": "translateX(-50%) translateZ(15px)"
+      },
+      "size": {
+        "width": "480px",
+        "height": "400px"
+      },
+      "opacity": 0.88
+    }
+  },
+  {
+    "id": "02_s_radhakrishnan",
+    "name": "Dr. S. Radhakrishnan",
+    "year": "1962",
+    "term": "1962 – 1967",
+    "duration": 13,
+    "x": 1400,
+    "y": -420,
+    "tagline": "The Philosopher Statesman & Global Scholar",
+    "subtleElement": "Holding an antique hardcover book with round spectacles",
+    "b1": {
+      "tag": "📖 Teachers' Day Beacon",
+      "desc": "Dedicated his September 5 birthday to celebrate teachers and scholars nationwide."
+    },
+    "b2": {
+      "tag": "🕊️ East-West Philosophy",
+      "desc": "Oxford Spalding Professor who bridged ancient Vedanta with modern world thought."
+    },
+    "audioUrl": "assets/audio/02_s_radhakrishnan.mp3",
+    "imageUrl": "assets/images/02_s_radhakrishnan.png",
+    "bgImageUrl": "assets/images/02_s_radhakrishnan_bg.png",
+    "bgMeta": {
+      "title": "Towering Oxford Philosophy Library & Scrolls",
+      "position": {
+        "bottom": "40px",
+        "left": "50%",
+        "transform": "translateX(-50%) translateZ(15px)"
+      },
+      "size": {
+        "width": "460px",
+        "height": "410px"
+      },
+      "opacity": 0.85
+    }
+  },
+  {
+    "id": "03_zakir_husain",
+    "name": "Dr. Zakir Husain",
+    "year": "1967",
+    "term": "1967 – 1969",
+    "duration": 12,
+    "x": 2750,
+    "y": 380,
+    "tagline": "Pioneer of Modern Secular Education",
+    "subtleElement": "Fountain pen clipped to black sherwani pocket",
+    "b1": {
+      "tag": "🎓 Jamia Millia Islamia",
+      "desc": "Founded national university; championed Nai Talim basic education for rural youth."
+    },
+    "b2": {
+      "tag": "🌹 Cultured Statesman",
+      "desc": "Renowned economist, botanist, rose breeder, and Bharat Ratna recipient."
+    },
+    "audioUrl": "assets/audio/03_zakir_husain.mp3",
+    "imageUrl": "assets/images/03_zakir_husain.png",
+    "bgImageUrl": "assets/images/03_zakir_husain_bg.png",
+    "bgMeta": {
+      "title": "Jamia Millia Heritage Archways & Rose Courtyard",
+      "position": {
+        "bottom": "35px",
+        "left": "50%",
+        "transform": "translateX(-50%) translateZ(15px)"
+      },
+      "size": {
+        "width": "470px",
+        "height": "390px"
+      },
+      "opacity": 0.88
+    }
+  },
+  {
+    "id": "04_vv_giri",
+    "name": "V. V. Giri",
+    "year": "1969",
+    "term": "1969 – 1974",
+    "duration": 11,
+    "x": 4100,
+    "y": -340,
+    "tagline": "Voice of the Working Class & Independent Tribune",
+    "subtleElement": "Standing pose with hands in pockets",
+    "b1": {
+      "tag": "⚒️ Labor Rights Luminary",
+      "desc": "President of All India Trade Union Congress; lifelong champion of fair worker wages."
+    },
+    "b2": {
+      "tag": "🗳️ Conscience Vote Poll",
+      "desc": "Only independent candidate in Indian history to win the supreme Presidency."
+    },
+    "audioUrl": "assets/audio/04_vv_giri.mp3",
+    "imageUrl": "assets/images/04_vv_giri.png",
+    "bgImageUrl": "assets/images/04_vv_giri_bg.png",
+    "bgMeta": {
+      "title": "Industrial Locomotive Gears & Workshop Platform",
+      "position": {
+        "bottom": "30px",
+        "left": "50%",
+        "transform": "translateX(-50%) translateZ(15px)"
+      },
+      "size": {
+        "width": "480px",
+        "height": "400px"
+      },
+      "opacity": 0.85
+    }
+  },
+  {
+    "id": "05_fakhruddin_ali_ahmed",
+    "name": "Fakhruddin Ali Ahmed",
+    "year": "1974",
+    "term": "1974 – 1977",
+    "duration": 11,
+    "x": 5450,
+    "y": 410,
+    "tagline": "Guardian in an Era of Historic Transitions",
+    "subtleElement": "Subtle legal leather folio under arm",
+    "b1": {
+      "tag": "⚖️ Cambridge Jurist",
+      "desc": "Advocate General of Assam and senior Union Minister for Food and Agriculture."
+    },
+    "b2": {
+      "tag": "⏳ Turbulent Transitions",
+      "desc": "Maintained constitutional decorum through the intense political storm of the 1970s."
+    },
+    "audioUrl": "assets/audio/05_fakhruddin_ali_ahmed.mp3",
+    "imageUrl": "assets/images/05_fakhruddin_ali_ahmed.png",
+    "bgImageUrl": "assets/images/05_fakhruddin_ali_ahmed_bg.png",
+    "bgMeta": {
+      "title": "Supreme Court Classical Portico & Marble Steps",
+      "position": {
+        "bottom": "35px",
+        "left": "50%",
+        "transform": "translateX(-50%) translateZ(15px)"
+      },
+      "size": {
+        "width": "470px",
+        "height": "390px"
+      },
+      "opacity": 0.85
+    }
+  },
+  {
+    "id": "06_neelam_sanjiva_reddy",
+    "name": "Neelam Sanjiva Reddy",
+    "year": "1977",
+    "term": "1977 – 1982",
+    "duration": 9,
+    "x": 6750,
+    "y": -290,
+    "tagline": "The Unopposed Leader & Agrarian Visionary",
+    "subtleElement": "A single golden wheat stalk tucked in pocket",
+    "b1": {
+      "tag": "🤝 Unanimous Mandate",
+      "desc": "Elected completely unopposed by every political faction across Parliament."
+    },
+    "b2": {
+      "tag": "🌾 Agrarian Champion",
+      "desc": "Youngest Lok Sabha Speaker who brought rural farming empowerment to the forefront."
+    },
+    "audioUrl": "assets/audio/06_neelam_sanjiva_reddy.mp3",
+    "imageUrl": "assets/images/06_neelam_sanjiva_reddy.png",
+    "bgImageUrl": "assets/images/06_neelam_sanjiva_reddy_bg.png",
+    "bgMeta": {
+      "title": "Golden Wheat Harvest Terrace & Parliament Colonnade",
+      "position": {
+        "bottom": "30px",
+        "left": "50%",
+        "transform": "translateX(-50%) translateZ(15px)"
+      },
+      "size": {
+        "width": "490px",
+        "height": "410px"
+      },
+      "opacity": 0.88
+    }
+  },
+  {
+    "id": "07_giani_zail_singh",
+    "name": "Giani Zail Singh",
+    "year": "1982",
+    "term": "1982 – 1987",
+    "duration": 12,
+    "x": 8100,
+    "y": 340,
+    "tagline": "Grassroots Statesman & Protector of Free Speech",
+    "subtleElement": "Signature fresh red rose pinned to achkan lapel",
+    "b1": {
+      "tag": "📮 Historic Pocket Veto",
+      "desc": "Famous refusal to sign the 1986 Post Office Bill, safeguarding citizen privacy."
+    },
+    "b2": {
+      "tag": "🌹 Grassroots Wit",
+      "desc": "Former Punjab Chief Minister known for folklore wisdom and constitutional courage."
+    },
+    "audioUrl": "assets/audio/07_giani_zail_singh.mp3",
+    "imageUrl": "assets/images/07_giani_zail_singh.png",
+    "bgImageUrl": "assets/images/07_giani_zail_singh_bg.png",
+    "bgMeta": {
+      "title": "Ornate Sandstone Jharokha & Red Carpet Floor",
+      "position": {
+        "bottom": "35px",
+        "left": "50%",
+        "transform": "translateX(-50%) translateZ(15px)"
+      },
+      "size": {
+        "width": "470px",
+        "height": "420px"
+      },
+      "opacity": 0.85
+    }
+  },
+  {
+    "id": "08_r_venkataraman",
+    "name": "R. Venkataraman",
+    "year": "1987",
+    "term": "1987 – 1992",
+    "duration": 11,
+    "x": 9450,
+    "y": -380,
+    "tagline": "The Constitutional Clock in Coalition Eras",
+    "subtleElement": "Angavastram drape and antique pocket watch chain",
+    "b1": {
+      "tag": "⏱️ The Emergency Lamp",
+      "desc": "Administered oaths to 4 Prime Ministers during swift multi-party coalition eras."
+    },
+    "b2": {
+      "tag": "🏭 Industrial Architect",
+      "desc": "UN Administrative Tribunal President who pioneered heavy industrial infrastructure."
+    },
+    "audioUrl": "assets/audio/08_r_venkataraman.mp3",
+    "imageUrl": "assets/images/08_r_venkataraman.png",
+    "bgImageUrl": "assets/images/08_r_venkataraman_bg.png",
+    "bgMeta": {
+      "title": "Brass Pendulum Clockwork & Five-Year Plan Schematics",
+      "position": {
+        "bottom": "35px",
+        "left": "50%",
+        "transform": "translateX(-50%) translateZ(15px)"
+      },
+      "size": {
+        "width": "470px",
+        "height": "400px"
+      },
+      "opacity": 0.85
+    }
+  },
+  {
+    "id": "09_shankar_dayal_sharma",
+    "name": "Dr. Shankar Dayal Sharma",
+    "year": "1992",
+    "term": "1992 – 1997",
+    "duration": 11,
+    "x": 10800,
+    "y": 350,
+    "tagline": "Scholar of Decorum & Sanskrit Jurisprudence",
+    "subtleElement": "Scholarly namaste greeting pose",
+    "b1": {
+      "tag": "📜 Sanskrit Jurisprudence",
+      "desc": "Cambridge PhD and Harvard scholar revered for deep Vedic and legal scholarship."
+    },
+    "b2": {
+      "tag": "🏛️ Decorum Guardian",
+      "desc": "Stood fearlessly for parliamentary ethics through three volatile general elections."
+    },
+    "audioUrl": "assets/audio/09_shankar_dayal_sharma.mp3",
+    "imageUrl": "assets/images/09_shankar_dayal_sharma.png",
+    "bgImageUrl": "assets/images/09_shankar_dayal_sharma_bg.png",
+    "bgMeta": {
+      "title": "Vedic Sandstone Pavilion & Sanskrit Stone Dais",
+      "position": {
+        "bottom": "35px",
+        "left": "50%",
+        "transform": "translateX(-50%) translateZ(15px)"
+      },
+      "size": {
+        "width": "460px",
+        "height": "400px"
+      },
+      "opacity": 0.85
+    }
+  },
+  {
+    "id": "10_kr_narayanan",
+    "name": "K. R. Narayanan",
+    "year": "1997",
+    "term": "1997 – 2002",
+    "duration": 11,
+    "x": 12150,
+    "y": -310,
+    "tagline": "The Working President & Nation’s Moral Compass",
+    "subtleElement": "Silver hair and diplomat fountain pen",
+    "b1": {
+      "tag": "🧭 Active Moral Compass",
+      "desc": "Returned Cabinet advice for democratic reconsideration, protecting constitutional norms."
+    },
+    "b2": {
+      "tag": "🌏 Diplomatic Pioneer",
+      "desc": "First Dalit diplomat and Ambassador to USA and China; London School of Economics alumnus."
+    },
+    "audioUrl": "assets/audio/10_kr_narayanan.mp3",
+    "imageUrl": "assets/images/10_kr_narayanan.png",
+    "bgImageUrl": "assets/images/10_kr_narayanan_bg.png",
+    "bgMeta": {
+      "title": "Diplomatic Summit Hall & Monumental Armillary Globe",
+      "position": {
+        "bottom": "30px",
+        "left": "50%",
+        "transform": "translateX(-50%) translateZ(15px)"
+      },
+      "size": {
+        "width": "470px",
+        "height": "410px"
+      },
+      "opacity": 0.88
+    }
+  },
+  {
+    "id": "11_apj_abdul_kalam",
+    "name": "Dr. A. P. J. Abdul Kalam",
+    "year": "2002",
+    "term": "2002 – 2007",
+    "duration": 12,
+    "x": 13500,
+    "y": 390,
+    "tagline": "The People’s President & Missile Pioneer",
+    "subtleElement": "Tiny metallic SLV-3 rocket lapel pin on suit",
+    "b1": {
+      "tag": "🚀 Missile Pioneer",
+      "desc": "Architect of SLV-3, Agni, Prithvi and scientific mastermind of Pokhran-II 1998."
+    },
+    "b2": {
+      "tag": "✨ People's President",
+      "desc": "Directly met and inspired over 500,000 students; author of Wings of Fire."
+    },
+    "audioUrl": "assets/audio/11_apj_abdul_kalam.mp3",
+    "imageUrl": "assets/images/11_apj_abdul_kalam.png",
+    "bgImageUrl": "assets/images/11_apj_abdul_kalam_bg.png",
+    "bgMeta": {
+      "title": "Pokhran-II Desert & Sriharikota SLV-3 Launch Gantry",
+      "position": {
+        "bottom": "25px",
+        "left": "50%",
+        "transform": "translateX(-50%) translateZ(15px)"
+      },
+      "size": {
+        "width": "500px",
+        "height": "430px"
+      },
+      "opacity": 0.9
+    }
+  },
+  {
+    "id": "12_pratibha_patil",
+    "name": "Pratibha Devisingh Patil",
+    "year": "2007",
+    "term": "2007 – 2012",
+    "duration": 12,
+    "x": 14850,
+    "y": -370,
+    "tagline": "First Woman Supreme Commander of Armed Forces",
+    "subtleElement": "Elegant handwoven sari with crisp border",
+    "b1": {
+      "tag": "⚡ First Woman President",
+      "desc": "Historic milestone breaking a 60-year glass ceiling for the Indian Republic."
+    },
+    "b2": {
+      "tag": "✈️ Sukhoi-30 Sortie",
+      "desc": "First woman head of state in history to co-pilot supersonic combat jet at age 74."
+    },
+    "audioUrl": "assets/audio/12_pratibha_patil.mp3",
+    "imageUrl": "assets/images/12_pratibha_patil.png",
+    "bgImageUrl": "assets/images/12_pratibha_patil_bg.png",
+    "bgMeta": {
+      "title": "Sukhoi-30 MKI Supersonic Fighter & Airfield Tarmac",
+      "position": {
+        "bottom": "20px",
+        "left": "50%",
+        "transform": "translateX(-50%) translateZ(15px)"
+      },
+      "size": {
+        "width": "510px",
+        "height": "420px"
+      },
+      "opacity": 0.9
+    }
+  },
+  {
+    "id": "13_pranab_mukherjee",
+    "name": "Pranab Mukherjee",
+    "year": "2012",
+    "term": "2012 – 2017",
+    "duration": 11,
+    "x": 16200,
+    "y": 320,
+    "tagline": "Citizen Mukherjee & Master Troubleshooter",
+    "subtleElement": "Holding a slim vintage ministerial leather folder",
+    "b1": {
+      "tag": "💼 Master Troubleshooter",
+      "desc": "Chaired over 95 Group of Ministers; commanded five decades of legislative mastery."
+    },
+    "b2": {
+      "tag": "🏛️ Citizen Mukherjee",
+      "desc": "Digitized Rashtrapati Bhavan library and opened presidential heritage to all citizens."
+    },
+    "audioUrl": "assets/audio/13_pranab_mukherjee.mp3",
+    "imageUrl": "assets/images/13_pranab_mukherjee.png",
+    "bgImageUrl": "assets/images/13_pranab_mukherjee_bg.png",
+    "bgMeta": {
+      "title": "Circular Parliament Colonnade & Red Carpet Corridor",
+      "position": {
+        "bottom": "35px",
+        "left": "50%",
+        "transform": "translateX(-50%) translateZ(15px)"
+      },
+      "size": {
+        "width": "490px",
+        "height": "400px"
+      },
+      "opacity": 0.88
+    }
+  },
+  {
+    "id": "14_ram_nath_kovind",
+    "name": "Ram Nath Kovind",
+    "year": "2017",
+    "term": "2017 – 2022",
+    "duration": 11,
+    "x": 17550,
+    "y": -290,
+    "tagline": "Grassroots Reformer & Advocate of Equal Justice",
+    "subtleElement": "Dignified posture with hands clasped in front",
+    "b1": {
+      "tag": "⚖️ Pro Bono Legal Crusade",
+      "desc": "Pioneered free legal defense aid for marginalized citizens as Supreme Court advocate."
+    },
+    "b2": {
+      "tag": "🌱 Grassroots Reformer",
+      "desc": "Represented India at UN General Assembly; championed rural educational talent."
+    },
+    "audioUrl": "assets/audio/14_ram_nath_kovind.mp3",
+    "imageUrl": "assets/images/14_ram_nath_kovind.png",
+    "bgImageUrl": "assets/images/14_ram_nath_kovind_bg.png",
+    "bgMeta": {
+      "title": "Courthouse Marble Steps & Ashoka Lion Pillar Plinth",
+      "position": {
+        "bottom": "30px",
+        "left": "50%",
+        "transform": "translateX(-50%) translateZ(15px)"
+      },
+      "size": {
+        "width": "480px",
+        "height": "410px"
+      },
+      "opacity": 0.88
+    }
+  },
+  {
+    "id": "15_droupadi_murmu",
+    "name": "Smt. Droupadi Murmu",
+    "year": "2022",
+    "term": "2022 – Present",
+    "duration": 11,
+    "x": 18900,
+    "y": 10,
+    "tagline": "Beacon of Tribal Empowerment & Democratic Inclusion",
+    "subtleElement": "Traditional white and green Santhali saree border",
+    "b1": {
+      "tag": "🌿 Historic Tribal Icon",
+      "desc": "First tribal President and youngest since Independence; proud Santhali grassroots icon."
+    },
+    "b2": {
+      "tag": "🌟 Educator & Crusader",
+      "desc": "Former grassroots teacher and governor empowering women and self-help groups."
+    },
+    "audioUrl": "assets/audio/15_droupadi_murmu.mp3",
+    "imageUrl": "assets/images/15_droupadi_murmu.png",
+    "bgImageUrl": "assets/images/15_droupadi_murmu_bg.png",
+    "bgMeta": {
+      "title": "New Parliament Triangular Facade & Santhali Stone Plinth",
+      "position": {
+        "bottom": "25px",
+        "left": "50%",
+        "transform": "translateX(-50%) translateZ(15px)"
+      },
+      "size": {
+        "width": "500px",
+        "height": "420px"
+      },
+      "opacity": 0.9
+    }
+  }
+]

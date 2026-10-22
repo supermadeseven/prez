@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Presidents of India | Master Dynamic 2.5D Motion Canvas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Caveat:wght@700&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    :root {
+      --bg-void: #040608;
+      --card-bg: rgba(12, 16, 25, 0.94);
+      --glow-line: #fffdf2;
+      --glow-warm: rgba(255, 238, 170, 0.85);
+      --accent-gold: #ffbe3b;
+      --bar-glow: rgba(255, 190, 59, 0.6);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-void);
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      overflow: hidden;
+      width: 1920px;
+      height: 1080px;
+    }
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 50%, #151b2a 0%, #07090f 55%, var(--bg-void) 100%);
+    }
+
+    /* Ambient Matrix Grid & Deep Cinematic Vignette */
+    .ambient-grid {
+      position: absolute;
+      inset: -3500px;
+      background-image: 
+        radial-gradient(rgba(255, 255, 255, 0.055) 1.5px, transparent 1.5px),
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 75px 75px, 75px 75px, 75px 75px;
+      pointer-events: none;
+    }
+    .vignette-fader {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 35%, rgba(4, 6, 8, 0.94) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Top Right Minimalist Index Pill */
+    .index-pill {
+      position: absolute;
+      top: 36px;
+      right: 56px;
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 2.5px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 253, 242, 0.28);
+      backdrop-filter: blur(14px);
+      padding: 10px 26px;
+      border-radius: 30px;
+      color: var(--glow-line);
+      box-shadow: 0 0 22px rgba(255, 238, 170, 0.18);
+      z-index: 50;
+      pointer-events: none;
+    }
+
+    /* 3D Infinite Canvas World */
+    .viewport {
+      position: absolute;
+      inset: 0;
+      perspective: 1500px;
+      z-index: 10;
+    }
+    #canvas-world {
+      position: absolute;
+      left: 960px;
+      top: 540px;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    /* Connecting Curved Line Overlay Between Nodes */
+    #svg-connections {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1px;
+      height: 1px;
+      overflow: visible;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .connector-line {
+      fill: none;
+      stroke: var(--glow-line);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 10px var(--glow-warm));
+    }
+
+    /* Main Center Presidential Node Container */
+    .pres-node {
+      position: absolute;
+      width: 480px;
+      height: 700px;
+      margin-left: -240px;
+      margin-top: -350px;
+      transform-style: preserve-3d;
+      z-index: 10;
+    }
+
+    /* Center Card Shell */
+    .card-core {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: var(--card-bg);
+      border-radius: 32px;
+      box-shadow: 0 45px 95px rgba(0, 0, 0, 0.9), 0 0 45px rgba(255, 238, 170, 0.08);
+      backdrop-filter: blur(28px);
+      transform-style: preserve-3d;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    /* Progressive Handmade Border */
+    .handmade-border-svg {
+      position: absolute;
+      inset: -12px;
+      width: calc(100% + 24px);
+      height: calc(100% + 24px);
+      overflow: visible;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .progressive-border-path {
+      fill: none;
+      stroke: var(--glow-line);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 12px var(--glow-warm)) drop-shadow(0 0 24px rgba(255, 190, 59, 0.4));
+    }
+
+    /* Massive Year Behind Head */
+    .year-behind-head {
+      position: absolute;
+      top: -36px;
+      left: 50%;
+      transform: translateX(-50%) translateZ(-20px);
+      font-family: 'Cinzel', serif;
+      font-size: 145px;
+      font-weight: 900;
+      color: rgba(255, 253, 242, 0.09);
+      letter-spacing: -3px;
+      text-shadow: 0 0 45px rgba(255, 238, 170, 0.28);
+      pointer-events: none;
+      z-index: 1;
+      white-space: nowrap;
+    }
+
+    /* Background Landmark Cutout (Layer 2 at Z: 10px) */
+    .bg-landmark-box {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%) translateZ(10px);
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      z-index: 2;
+      pointer-events: none;
+      will-change: transform;
+    }
+    .bg-landmark-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 32px rgba(0, 0, 0, 0.85));
+    }
+
+    /* Foreground President Cutout (Layer 3 at Z: 85px for Heavy 2.5D Parallax) */
+    .cutout-box {
+      position: absolute;
+      top: -55px;
+      left: 50%;
+      width: 410px;
+      height: 510px;
+      transform: translateX(-50%) translateZ(85px);
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      z-index: 4;
+      pointer-events: none;
+      will-change: transform;
+    }
+    .cutout-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 28px 40px rgba(0, 0, 0, 0.95));
+      -webkit-box-reflect: below 2px linear-gradient(transparent 75%, rgba(0, 0, 0, 0.28));
+    }
+
+    /* Bottom Card Details */
+    .card-details {
+      position: absolute;
+      bottom: 24px;
+      left: 28px;
+      right: 28px;
+      transform: translateZ(40px);
+      z-index: 6;
+    }
+    .term-badge {
+      display: inline-flex;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      background: rgba(255, 190, 59, 0.16);
+      border: 1px solid rgba(255, 190, 59, 0.4);
+      padding: 5px 15px;
+      border-radius: 20px;
+      margin-bottom: 6px;
+    }
+    .pres-name {
+      font-family: 'Cinzel', serif;
+      font-size: 27px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    /* =========================================================================
+       CANVAS FREESTANDING KINETIC GROUPS (TOP MARGIN + INDIVIDUAL SIZES)
+       ========================================================================= */
+    .canvas-group {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      pointer-events: none;
+      transform-style: preserve-3d;
+      z-index: 25;
+    }
+
+    /* Micro-Element: SVG Icon Wrapper */
+    .group-icon-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 0 16px rgba(255, 190, 59, 0.85));
+    }
+    .motion-svg-art {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .drawn-stroke {
+      fill: none;
+      stroke: var(--accent-gold);
+      stroke-width: 3.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Punchy Kinetic Gradient Headlines */
+    .group-headline {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+      filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.9));
+    }
+    .headline-gold {
+      background: linear-gradient(135deg, #ffffff 0%, #ffbe3b 60%, #ff883b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 15px rgba(255, 190, 59, 0.45));
+    }
+    .headline-cyan {
+      background: linear-gradient(135deg, #ffffff 0%, #00f2fe 55%, #4facfe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 15px rgba(0, 242, 254, 0.45));
+    }
+    .headline-crimson {
+      background: linear-gradient(135deg, #ffffff 0%, #ff4b5a 50%, #ffbe3b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 15px rgba(255, 75, 90, 0.45));
+    }
+
+    /* Handwritten Cursive Annotations */
+    .group-sub {
+      font-family: 'Caveat', cursive;
+      font-size: 25px;
+      color: var(--accent-gold);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 10px rgba(255, 190, 59, 0.5);
+    }
+
+    /* =========================================================================
+       EXCLUSIVE MASSIVE IMPACT STAMP (3RD ELEMENT SLAM PHYSICS)
+       ========================================================================= */
+    .impact-stamp-card {
+      position: absolute;
+      pointer-events: none;
+      transform-style: preserve-3d;
+      z-index: 35;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: 0 35px 80px rgba(0, 0, 0, 0.95);
+      border-radius: 24px;
+    }
+
+    /* Bespoke Physical Metaphor Shapes for Stamps */
+    .stamp-railway {
+      background: #24160a;
+      border: 3px dashed #ffbe3b;
+      padding: 16px 28px;
+      clip-path: polygon(0 0, 96% 0, 100% 15%, 96% 30%, 100% 45%, 96% 60%, 100% 75%, 96% 90%, 100% 100%, 0 100%);
+    }
+    .stamp-nobel {
+      background: radial-gradient(circle at 30% 30%, #523f0d, #1a1403);
+      border: 3.5px double #ffbe3b;
+      padding: 18px 30px;
+      box-shadow: 0 0 45px rgba(255, 190, 59, 0.5);
+    }
+    .stamp-coin {
+      background: radial-gradient(circle, #2d183d, #14081c);
+      border: 2.5px solid #c084fc;
+      padding: 16px 28px;
+    }
+    .stamp-warrant {
+      background: #280b10;
+      border-right: 6px solid #ff3b47;
+      border-top: 1.5px solid #ff3b47;
+      padding: 16px 26px;
+    }
+    .stamp-tennis {
+      background: #09261a;
+      border: 2.5px solid #10b981;
+      border-radius: 18px 18px 45px 45px;
+      padding: 18px 28px;
+    }
+    .stamp-eco {
+      background: #0f2b15;
+      border: 2.5px solid #34d399;
+      padding: 16px 26px;
+    }
+    .stamp-milestone {
+      background: #2b200b;
+      border: 3px solid #ffbe3b;
+      border-radius: 35px 35px 12px 12px;
+      padding: 18px 26px;
+    }
+    .stamp-treasury {
+      background: #241e0e;
+      border-top: 5px solid #ffbe3b;
+      padding: 16px 26px;
+    }
+    .stamp-cambridge {
+      background: #2b0b16;
+      border: 2.5px solid #f43f5e;
+      padding: 16px 26px;
+    }
+    .stamp-press {
+      background: #0a1b2b;
+      border: 2.5px solid #00f2fe;
+      padding: 16px 26px;
+    }
+    .stamp-cheque {
+      background: #261b0c;
+      border-bottom: 5px solid #f59e0b;
+      padding: 16px 26px;
+    }
+    .stamp-rosette {
+      background: #081d36;
+      border: 2.5px solid #38bdf8;
+      border-radius: 35px;
+      padding: 16px 28px;
+      box-shadow: 0 0 35px rgba(56, 189, 248, 0.4);
+    }
+    .stamp-diary {
+      background: #260e0e;
+      border-left: 6px solid #fb7185;
+      padding: 16px 26px;
+    }
+    .stamp-deed {
+      background: #261c10;
+      border: 2.5px solid #fbbf24;
+      padding: 16px 26px;
+    }
+    .stamp-lotus {
+      background: radial-gradient(circle at top, #3b220b, #140b04);
+      border: 2.5px solid #f59e0b;
+      border-radius: 30px;
+      padding: 18px 30px;
+      box-shadow: 0 0 40px rgba(245, 158, 11, 0.45);
+    }
+
+    .stamp-micro-badge {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      margin-bottom: 4px;
+    }
+    .stamp-main-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    }
+
+    /* Full Animated Hand-Drawn Gradient Progress Bar */
+    .progress-bar-container {
+      position: absolute;
+      bottom: 24px;
+      left: 80px;
+      right: 80px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      z-index: 60;
+      pointer-events: none;
+    }
+    .handdrawn-progress-svg {
+      width: 100%;
+      height: 28px;
+      overflow: visible;
+    }
+    .progress-track-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.12);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .progress-track-fill {
+      fill: none;
+      stroke: url(#progGradient);
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 12px var(--bar-glow));
+    }
+  </style>
+</head>
+<body>
+  <!-- HyperFrames Root Composition: 268s Duration Total -->
+  <div id="root" data-composition-id="main" data-start="0" data-duration="268" data-width="1920" data-height="1080">
+    <div class="ambient-grid"></div>
+    <div class="vignette-fader"></div>
+
+    <!-- Top Right Minimal Index Pill -->
+    <div class="index-pill" id="counterIndicator">01 / 15</div>
+
+    <div class="viewport">
+      <div id="canvas-world">
+        <svg id="svg-connections"></svg>
+      </div>
+    </div>
+
+    <!-- Full Hand-Drawn Multi-Color Animated Progress Bar -->
+    <div class="progress-bar-container">
+      <svg class="handdrawn-progress-svg" viewBox="0 0 1760 28" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="progGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop id="stop1" offset="0%" stop-color="#ff3b47" />
+            <stop id="stop2" offset="30%" stop-color="#ffbe3b" />
+            <stop id="stop3" offset="65%" stop-color="#00f2fe" />
+            <stop id="stop4" offset="100%" stop-color="#4facfe" />
+          </linearGradient>
+        </defs>
+        <path class="progress-track-bg" d="M 10 14 C 320 11, 740 17, 1100 13 C 1420 15, 1680 12, 1750 14" />
+        <path id="progressFillPath" class="progress-track-fill" d="M 10 14 C 320 11, 740 17, 1100 13 C 1420 15, 1680 12, 1750 14" stroke-dasharray="1760" stroke-dashoffset="1760" />
+      </svg>
+    </div>
+
+    <!-- 15 Timed Audio Tracks (Exact Durations: 268s Total) -->
+    <audio preload="auto" src="assets/audio/01_rajendra_prasad.mp3" data-start="0" data-duration="19" data-track-index="0"></audio>
+    <audio preload="auto" src="assets/audio/02_s_radhakrishnan.mp3" data-start="19" data-duration="17" data-track-index="0"></audio>
+    <audio preload="auto" src="assets/audio/03_zakir_husain.mp3" data-start="36" data-duration="20" data-track-index="0"></audio>
+    <audio preload="auto" src="assets/audio/04_vv_giri.mp3" data-start="56" data-duration="18" data-track-index="0"></audio>
+    <audio preload="auto" src="assets/audio/05_fakhruddin_ali_ahmed.mp3" data-start="74" data-duration="18" data-track-index="0"></audio>
+    <audio preload="auto" src="assets/audio/06_neelam_sanjiva_reddy.mp3" data-start="92" data-duration="18" data-track-index="0"></audio>
+    <audio preload="auto" src="assets/audio/07_giani_zail_singh.mp3" data-start="110" data-duration="18" data-track-index="0"></audio>
+    <audio preload="auto" src="assets/audio/08_r_venkataraman.mp3" data-start="128" data-duration="16" data-track-index="0"></audio>
+    <audio preload="auto" src="assets/audio/09_shankar_dayal_sharma.mp3" data-start="144" data-duration="17" data-track-index="0"></audio>
+    <audio preload="auto" src="assets/audio/10_kr_narayanan.mp3" data-start="161" data-duration="17" data-track-index="0"></audio>
+    <audio preload="auto" src="assets/audio/11_apj_abdul_kalam.mp3" data-start="178" data-duration="17" data-track-index="0"></audio>
+    <audio preload="auto" src="assets/audio/12_pratibha_patil.mp3" data-start="195" data-duration="18" data-track-index="0"></audio>
+    <audio preload="audio" src="assets/audio/13_pranab_mukherjee.mp3" data-start="213" data-duration="17" data-track-index="0"></audio>
+    <audio preload="auto" src="assets/audio/14_ram_nath_kovind.mp3" data-start="230" data-duration="17" data-track-index="0"></audio>
+    <audio preload="auto" src="assets/audio/15_droupadi_murmu.mp3" data-start="247" data-duration="21" data-track-index="0"></audio>
+  </div>
+
+  <script>
+    // 15 Presidents Master Motion Graphics Dataset
+    // CHRONOLOGY RULE: Event 1 (e1) is ALWAYS the first fact spoken in audio (~3s).
+    // Event 2 (e2) is ALWAYS the second fact spoken in audio (just before 10s mark ~8.8s to 9.2s).
+    // SPATIAL RULE: In Odd Scenes (1,3,5...) e1 is on LEFT, e2 is on RIGHT.
+    // In Even Scenes (2,4,6...) e1 is on RIGHT, e2 is on LEFT!
+    // SCALE RULE: The first element has +20% bigger size, the second has -20% compact size (alternated).
+    const PRESIDENTS = [
+      {
+        id: "01_rajendra_prasad",
+        name: "Dr. Rajendra Prasad",
+        year: "1950",
+        term: "1950 – 1962",
+        duration: 19,
+        x: 0,
+        y: 0,
+        img: "assets/images/01_rajendra_prasad.png",
+        fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Rajendra_Prasad_1952.jpg/440px-Rajendra_Prasad_1952.jpg",
+        bgImg: "assets/images/01_rajendra_prasad_bg.png",
+        bgMeta: { title: "Rashtrapati Bhavan Colonnade", bottom: "35px", w: "480px", h: "410px", opacity: 0.88 },
+        // e1 (First in VO): Refused Salary -> Placed LEFT (+20% Bigger)
+        e1: {
+          side: "left",
+          pos: "left: -440px; top: 40px; width: 420px;",
+          rot: -3.5,
+          theme: "headline-gold",
+          fontSize: "46px",
+          iconSize: "96px",
+          title: "REFUSED 75% SALARY",
+          sub: "Accepted Only ₹2,500 of ₹10,000",
+          time: 3.0,
+          svg: `<circle cx="48" cy="48" r="38" class="drawn-stroke"/><path d="M30 30l36 36M66 30L30 66" stroke="#ff3b47" stroke-width="5" class="drawn-stroke"/>`
+        },
+        // e2 (Second in VO): Parade before pyre -> Placed RIGHT (-20% Compact, at ~9.0s)
+        e2: {
+          side: "right",
+          pos: "right: -420px; top: 80px; width: 340px;",
+          rot: 3.0,
+          theme: "headline-crimson",
+          fontSize: "32px",
+          iconSize: "68px",
+          title: "PARADE OVER GRIEF",
+          sub: "Led Parade Before Sister's Pyre",
+          time: 9.0,
+          svg: `<path d="M34 12c-9 12-16 20-7 32 5 7 16 5 16-5 0-12-9-16-9-27z" stroke="#ff3b47" stroke-width="3" fill="rgba(255,59,71,0.25)" class="drawn-stroke"/><path d="M20 50h28" stroke="#ffbe3b" stroke-width="3" class="drawn-stroke"/>`
+        },
+        // 3rd Element: Massive Impact Stamp (Last 3.5s)
+        stamp: {
+          shapeClass: "stamp-railway",
+          pos: "left: -440px; bottom: 25px;",
+          badge: "📜 CLASSIFIED SECRET",
+          main: "ORDINARY 3RD CLASS TRAIN",
+          time: 15.5
+        }
+      },
+      {
+        id: "02_s_radhakrishnan",
+        name: "Dr. S. Radhakrishnan",
+        year: "1962",
+        term: "1962 – 1967",
+        duration: 17,
+        x: 1600,
+        y: -420,
+        img: "assets/images/02_s_radhakrishnan.png",
+        fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Sarvepalli_Radhakrishnan_1962.jpg/440px-Sarvepalli_Radhakrishnan_1962.jpg",
+        bgImg: "assets/images/02_s_radhakrishnan_bg.png",
+        bgMeta: { title: "Oxford Library & Scrolls", bottom: "40px", w: "470px", h: "410px", opacity: 0.85 },
+        // e1 (First in VO): Students pulled carriage -> Placed RIGHT (+20% Bigger) [Even Scene Shift!]
+        e1: {
+          side: "right",
+          pos: "right: -440px; top: 40px; width: 420px;",
+          rot: 3.5,
+          theme: "headline-cyan",
+          fontSize: "46px",
+          iconSize: "96px",
+          title: "PULLED CARRIAGE THEMSELVES",
+          sub: "Students Unhitched Horses to Station",
+          time: 3.0,
+          svg: `<rect x="16" y="26" width="56" height="30" rx="4" class="drawn-stroke"/><circle cx="28" cy="66" r="9" class="drawn-stroke"/><circle cx="60" cy="66" r="9" class="drawn-stroke"/><path d="M72 40h16" class="drawn-stroke"/>`
+        },
+        // e2 (Second in VO): Stalin meeting -> Placed LEFT (-20% Compact, at ~9.0s)
+        e2: {
+          side: "left",
+          pos: "left: -420px; top: 80px; width: 340px;",
+          rot: -2.8,
+          theme: "headline-gold",
+          fontSize: "32px",
+          iconSize: "68px",
+          title: "STALIN IN PRIVATE",
+          sub: "Kremlin Dictator Broke Protocol",
+          time: 9.0,
+          svg: `<polygon points="34,10 40,24 54,24 42,32 46,46 34,38 22,46 26,32 14,24 28,24" class="drawn-stroke"/><circle cx="34" cy="28" r="4" stroke="#00f2fe" class="drawn-stroke"/>`
+        },
+        stamp: {
+          shapeClass: "stamp-nobel",
+          pos: "right: -440px; bottom: 25px;",
+          badge: "🎖️ HISTORIC RECORD",
+          main: "27X NOBEL NOMINEE",
+          time: 13.5
+        }
+      },
+      {
+        id: "03_zakir_husain",
+        name: "Dr. Zakir Husain",
+        year: "1967",
+        term: "1967 – 1969",
+        duration: 20,
+        x: 3200,
+        y: 400,
+        img: "assets/images/03_zakir_husain.png",
+        fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Zakir_Hussain_1967.jpg/440px-Zakir_Hussain_1967.jpg",
+        bgImg: "assets/images/03_zakir_husain_bg.png",
+        bgMeta: { title: "Jamia Millia Heritage Archways", bottom: "35px", w: "480px", h: "400px", opacity: 0.88 },
+        // e1 (First in VO): Stood down armed mob -> Placed LEFT (+20% Bigger)
+        e1: {
+          side: "left",
+          pos: "left: -440px; top: 40px; width: 420px;",
+          rot: -3.5,
+          theme: "headline-crimson",
+          fontSize: "44px",
+          iconSize: "96px",
+          title: "FACED DOWN ARMED MOB",
+          sub: "Unarmed in Partition Violence",
+          time: 3.2,
+          svg: `<path d="M48 16l26 11v20c0 17-26 29-26 29S22 64 22 47V27z" class="drawn-stroke"/><path d="M35 44l9 9 18-18" stroke="#00f2fe" class="drawn-stroke"/>`
+        },
+        // e2 (Second in VO): 500 Roses -> Placed RIGHT (-20% Compact, at ~9.2s)
+        e2: {
+          side: "right",
+          pos: "right: -420px; top: 80px; width: 340px;",
+          rot: 3.0,
+          theme: "headline-gold",
+          fontSize: "32px",
+          iconSize: "68px",
+          title: "500 BOTANICAL ROSES",
+          sub: "Curated Presidential Marvel",
+          time: 9.2,
+          svg: `<circle cx="34" cy="24" r="13" class="drawn-stroke"/><path d="M34 37v18M27 43l7-6 7 6" stroke="#ff3b47" class="drawn-stroke"/>`
+        },
+        stamp: {
+          shapeClass: "stamp-coin",
+          pos: "left: -440px; bottom: 25px;",
+          badge: "🪙 ANCIENT NUMISMATIST",
+          main: "DELHI SULTANATE COINS",
+          time: 16.5
+        }
+      },
+      {
+        id: "04_vv_giri",
+        name: "V. V. Giri",
+        year: "1969",
+        term: "1969 – 1974",
+        duration: 18,
+        x: 4800,
+        y: -360,
+        img: "assets/images/04_vv_giri.png",
+        fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Varahagiri_Venkata_Giri_1969.jpg/440px-Varahagiri_Venkata_Giri_1969.jpg",
+        bgImg: "assets/images/04_vv_giri_bg.png",
+        bgMeta: { title: "Industrial Gears & Locomotive Platform", bottom: "30px", w: "490px", h: "410px", opacity: 0.85 },
+        // e1 (First in VO): Rebel underdog took on syndicate -> Placed RIGHT (+20% Bigger)
+        e1: {
+          side: "right",
+          pos: "right: -440px; top: 40px; width: 420px;",
+          rot: 3.5,
+          theme: "headline-gold",
+          fontSize: "46px",
+          iconSize: "96px",
+          title: "REBEL UNDERDOG",
+          sub: "Took on the Party Syndicate",
+          time: 3.0,
+          svg: `<circle cx="32" cy="46" r="13" class="drawn-stroke"/><circle cx="62" cy="46" r="13" class="drawn-stroke"/><path d="M42 34l10 24M52 34l-10 24" stroke="#ff3b47" stroke-width="4.5" class="drawn-stroke"/>`
+        },
+        // e2 (Second in VO): Conscience vote 1969 -> Placed LEFT (-20% Compact, at ~9.0s)
+        e2: {
+          side: "left",
+          pos: "left: -420px; top: 80px; width: 340px;",
+          rot: -2.8,
+          theme: "headline-cyan",
+          fontSize: "32px",
+          iconSize: "68px",
+          title: "CONSCIENCE VOTE 1969",
+          sub: "Wildest Democratic Upset",
+          time: 9.0,
+          svg: `<rect x="20" y="24" width="34" height="32" rx="4" class="drawn-stroke"/><path d="M26 24v-10h16v10" class="drawn-stroke"/><path d="M24 38l7 7 14-14" stroke="#00f2fe" class="drawn-stroke"/>`
+        },
+        stamp: {
+          shapeClass: "stamp-warrant",
+          pos: "right: -440px; bottom: 25px;",
+          badge: "🇮🇪 1916 EASTER RISING",
+          main: "EXPELLED FROM IRELAND",
+          time: 14.5
+        }
+      },
+      {
+        id: "05_fakhruddin_ali_ahmed",
+        name: "Fakhruddin Ali Ahmed",
+        year: "1974",
+        term: "1974 – 1977",
+        duration: 18,
+        x: 6400,
+        y: 420,
+        img: "assets/images/05_fakhruddin_ali_ahmed.png",
+        fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Fakhruddin_Ali_Ahmed_1974.jpg/440px-Fakhruddin_Ali_Ahmed_1974.jpg",
+        bgImg: "assets/images/05_fakhruddin_ali_ahmed_bg.png",
+        bgMeta: { title: "Supreme Court Portico & Steps", bottom: "35px", w: "480px", h: "400px", opacity: 0.85 },
+        // e1 (First in VO): Tennis ace & Cambridge barrister -> Placed LEFT (+20% Bigger)
+        e1: {
+          side: "left",
+          pos: "left: -440px; top: 40px; width: 420px;",
+          rot: -3.5,
+          theme: "headline-gold",
+          fontSize: "44px",
+          iconSize: "96px",
+          title: "CAMBRIDGE BARRISTER",
+          sub: "Inner Temple Scholar & Tennis Ace",
+          time: 3.2,
+          svg: `<ellipse cx="48" cy="32" rx="22" ry="24" class="drawn-stroke"/><path d="M48 56v26M38 82h20M34 22l28 20" class="drawn-stroke"/>`
+        },
+        // e2 (Second in VO): Midnight emergency -> Placed RIGHT (-20% Compact, at ~9.0s)
+        e2: {
+          side: "right",
+          pos: "right: -420px; top: 80px; width: 340px;",
+          rot: 3.0,
+          theme: "headline-crimson",
+          fontSize: "32px",
+          iconSize: "68px",
+          title: "MIDNIGHT 12:00 DECREE",
+          sub: "Constitutional Crisis Storm",
+          time: 9.0,
+          svg: `<circle cx="34" cy="34" r="23" class="drawn-stroke"/><path d="M34 16v18l10-6" stroke-width="3" class="drawn-stroke"/><circle cx="34" cy="34" r="2.5" fill="#ffbe3b"/>`
+        },
+        stamp: {
+          shapeClass: "stamp-tennis",
+          pos: "left: -440px; bottom: 25px;",
+          badge: "🎾 DAVIS CUP LEADER",
+          main: "ALL INDIA TENNIS CHIEF",
+          time: 14.5
+        }
+      },
+      {
+        id: "06_neelam_sanjiva_reddy",
+        name: "Neelam Sanjiva Reddy",
+        year: "1977",
+        term: "1977 – 1982",
+        duration: 18,
+        x: 8000,
+        y: -310,
+        img: "assets/images/06_neelam_sanjiva_reddy.png",
+        fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Neelam_Sanjiva_Reddy_1977.jpg/440px-Neelam_Sanjiva_Reddy_1977.jpg",
+        bgImg: "assets/images/06_neelam_sanjiva_reddy_bg.png",
+        bgMeta: { title: "Wheat Harvest & Parliament Colonnade", bottom: "30px", w: "500px", h: "420px", opacity: 0.88 },
+        // e1 (First in VO): Walked away to plow fields -> Placed RIGHT (+20% Bigger)
+        e1: {
+          side: "right",
+          pos: "right: -440px; top: 40px; width: 420px;",
+          rot: 3.5,
+          theme: "headline-gold",
+          fontSize: "46px",
+          iconSize: "96px",
+          title: "PLOWED VILLAGE FIELDS",
+          sub: "Walked Away to Farming Soil",
+          time: 3.0,
+          svg: `<path d="M16 66h60M22 54l24 12 30-36M32 36l14 20" class="drawn-stroke"/>`
+        },
+        // e2 (Second in VO): 100% unopposed win -> Placed LEFT (-20% Compact, at ~9.2s)
+        e2: {
+          side: "left",
+          pos: "left: -420px; top: 80px; width: 340px;",
+          rot: -2.8,
+          theme: "headline-cyan",
+          fontSize: "32px",
+          iconSize: "68px",
+          title: "100% UNOPPOSED WIN",
+          sub: "All Political Parties United",
+          time: 9.2,
+          svg: `<circle cx="34" cy="34" r="23" class="drawn-stroke"/><path d="M22 34l8 8 14-14" stroke="#00f2fe" stroke-width="4" class="drawn-stroke"/>`
+        },
+        stamp: {
+          shapeClass: "stamp-eco",
+          pos: "right: -440px; bottom: 25px;",
+          badge: "🌾 SURRENDERED PALACE",
+          main: "GAVE UP 70% OF PALACE",
+          time: 14.5
+        }
+      },
+      {
+        id: "07_giani_zail_singh",
+        name: "Giani Zail Singh",
+        year: "1982",
+        term: "1982 – 1987",
+        duration: 18,
+        x: 9600,
+        y: 350,
+        img: "assets/images/07_giani_zail_singh.png",
+        fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Giani_Zail_Singh_1982.jpg/440px-Giani_Zail_Singh_1982.jpg",
+        bgImg: "assets/images/07_giani_zail_singh_bg.png",
+        bgMeta: { title: "Sandstone Jharokha & Red Carpet", bottom: "35px", w: "480px", h: "410px", opacity: 0.85 },
+        // e1 (First in VO): Secret mail interception bill -> Placed LEFT (+20% Bigger)
+        e1: {
+          side: "left",
+          pos: "left: -440px; top: 40px; width: 420px;",
+          rot: -3.5,
+          theme: "headline-crimson",
+          fontSize: "44px",
+          iconSize: "96px",
+          title: "BLOCKED POSTAL LAW",
+          sub: "Saved Citizen Mail Privacy",
+          time: 3.2,
+          svg: `<rect x="16" y="28" width="58" height="38" rx="3" class="drawn-stroke"/><path d="M16 30l29 22 29-22" class="drawn-stroke"/>`
+        },
+        // e2 (Second in VO): Pocket veto in desk drawer -> Placed RIGHT (-20% Compact, at ~9.0s)
+        e2: {
+          side: "right",
+          pos: "right: -420px; top: 80px; width: 340px;",
+          rot: 3.0,
+          theme: "headline-gold",
+          fontSize: "32px",
+          iconSize: "68px",
+          title: "THE POCKET VETO",
+          sub: "Slipped Bill into Desk Drawer",
+          time: 9.0,
+          svg: `<rect x="14" y="24" width="40" height="24" rx="4" class="drawn-stroke"/><circle cx="34" cy="36" r="3.5" class="drawn-stroke"/><path d="M26 24v-7a8 8 0 0 1 16 0v7" class="drawn-stroke"/>`
+        },
+        stamp: {
+          shapeClass: "stamp-milestone",
+          pos: "left: -440px; bottom: 25px;",
+          badge: "🛣️ GURU GOBIND SINGH MARG",
+          main: "BUILT 640 KM HIGHWAY",
+          time: 14.5
+        }
+      },
+      {
+        id: "08_r_venkataraman",
+        name: "R. Venkataraman",
+        year: "1987",
+        term: "1987 – 1992",
+        duration: 16,
+        x: 11200,
+        y: -390,
+        img: "assets/images/08_r_venkataraman.png",
+        fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Ramaswamy_Venkataraman_1987.jpg/440px-Ramaswamy_Venkataraman_1987.jpg",
+        bgImg: "assets/images/08_r_venkataraman_bg.png",
+        bgMeta: { title: "Brass Clockwork & Plan Schematics", bottom: "35px", w: "480px", h: "400px", opacity: 0.85 },
+        // e1 (First in VO): 4 PMs in 4 years -> Placed RIGHT (+20% Bigger)
+        e1: {
+          side: "right",
+          pos: "right: -440px; top: 40px; width: 420px;",
+          rot: 3.5,
+          theme: "headline-cyan",
+          fontSize: "46px",
+          iconSize: "96px",
+          title: "4 PRIME MINISTERS",
+          sub: "Sworn In Across 4 Coalition Years",
+          time: 2.8,
+          svg: `<circle cx="26" cy="30" r="9" class="drawn-stroke"/><circle cx="48" cy="26" r="9" class="drawn-stroke"/><circle cx="70" cy="30" r="9" class="drawn-stroke"/><circle cx="48" cy="64" r="9" class="drawn-stroke"/>`
+        },
+        // e2 (Second in VO): Emergency lamp -> Placed LEFT (-20% Compact, at ~8.8s)
+        e2: {
+          side: "left",
+          pos: "left: -420px; top: 80px; width: 340px;",
+          rot: -2.8,
+          theme: "headline-gold",
+          fontSize: "32px",
+          iconSize: "68px",
+          title: "THE EMERGENCY LAMP",
+          sub: "Glows Decisively When Power Fails",
+          time: 8.8,
+          svg: `<path d="M34 13c-9 0-14 7-14 14 0 7 6 10 7 14h14c2-4 7-7 7-14 0-7-5-14-14-14z" class="drawn-stroke"/><path d="M24 41v5h20v-5" class="drawn-stroke"/>`
+        },
+        stamp: {
+          shapeClass: "stamp-treasury",
+          pos: "right: -440px; bottom: 25px;",
+          badge: "💰 TREASURY REFUND",
+          main: "SURRENDERED PENSION",
+          time: 12.5
+        }
+      },
+      {
+        id: "09_shankar_dayal_sharma",
+        name: "Dr. Shankar Dayal Sharma",
+        year: "1992",
+        term: "1992 – 1997",
+        duration: 17,
+        x: 12800,
+        y: 360,
+        img: "assets/images/09_shankar_dayal_sharma.png",
+        fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Shankar_Dayal_Sharma_1992.jpg/440px-Shankar_Dayal_Sharma_1992.jpg",
+        bgImg: "assets/images/09_shankar_dayal_sharma_bg.png",
+        bgMeta: { title: "Vedic Pavilion & Sanskrit Dais", bottom: "35px", w: "480px", h: "410px", opacity: 0.85 },
+        // e1 (First in VO): Wept in Parliament for decorum -> Placed LEFT (+20% Bigger)
+        e1: {
+          side: "left",
+          pos: "left: -440px; top: 40px; width: 420px;",
+          rot: -3.5,
+          theme: "headline-cyan",
+          fontSize: "44px",
+          iconSize: "96px",
+          title: "TEARS IN PARLIAMENT",
+          sub: "Wept to Defend House Decorum",
+          time: 3.0,
+          svg: `<rect x="22" y="32" width="48" height="17" rx="3" class="drawn-stroke"/><path d="M46 49v26M36 75h20" class="drawn-stroke"/>`
+        },
+        // e2 (Second in VO): Sultan of Oman drove his car -> Placed RIGHT (-20% Compact, at ~9.0s)
+        e2: {
+          side: "right",
+          pos: "right: -420px; top: 80px; width: 340px;",
+          rot: 3.0,
+          theme: "headline-gold",
+          fontSize: "32px",
+          iconSize: "68px",
+          title: "SULTAN DROVE HIS CAR",
+          sub: "Oman Monarch Broke Protocol",
+          time: 9.0,
+          svg: `<circle cx="34" cy="34" r="23" class="drawn-stroke"/><circle cx="34" cy="34" r="7" class="drawn-stroke"/><path d="M34 11v16M34 41v16M11 34h16M41 34h16" class="drawn-stroke"/>`
+        },
+        stamp: {
+          shapeClass: "stamp-cambridge",
+          pos: "left: -440px; bottom: 25px;",
+          badge: "🎓 CAMBRIDGE LAW FELLOW",
+          main: "HARVARD & CAMBRIDGE SCHOLAR",
+          time: 13.5
+        }
+      },
+      {
+        id: "10_kr_narayanan",
+        name: "K. R. Narayanan",
+        year: "1997",
+        term: "1997 – 2002",
+        duration: 17,
+        x: 14400,
+        y: -330,
+        img: "assets/images/10_kr_narayanan.png",
+        fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/K._R._Narayanan_official_portrait.jpg/440px-K._R._Narayanan_official_portrait.jpg",
+        bgImg: "assets/images/10_kr_narayanan_bg.png",
+        bgMeta: { title: "Diplomatic Hall & Armillary Globe", bottom: "30px", w: "490px", h: "420px", opacity: 0.88 },
+        // e1 (First in VO): Walked miles barefoot -> Placed RIGHT (+20% Bigger)
+        e1: {
+          side: "right",
+          pos: "right: -440px; top: 40px; width: 420px;",
+          rot: 3.5,
+          theme: "headline-gold",
+          fontSize: "46px",
+          iconSize: "96px",
+          title: "BAREFOOT TO SCHOOL",
+          sub: "Kerala Poverty to L.S.E. Topper",
+          time: 3.0,
+          svg: `<ellipse cx="36" cy="46" rx="10" ry="20" class="drawn-stroke"/><circle cx="28" cy="22" r="4" class="drawn-stroke"/><circle cx="36" cy="18" r="4" class="drawn-stroke"/><circle cx="44" cy="22" r="4" class="drawn-stroke"/>`
+        },
+        // e2 (Second in VO): Stood in public queue to vote -> Placed LEFT (-20% Compact, at ~9.0s)
+        e2: {
+          side: "left",
+          pos: "left: -420px; top: 80px; width: 340px;",
+          rot: -2.8,
+          theme: "headline-cyan",
+          fontSize: "32px",
+          iconSize: "68px",
+          title: "ORDINARY CITIZEN VOTE",
+          sub: "Stood in Public Voting Queue",
+          time: 9.0,
+          svg: `<rect x="18" y="16" width="32" height="40" rx="4" class="drawn-stroke"/><path d="M24 34l7 7 14-14" stroke="#00f2fe" stroke-width="3.5" class="drawn-stroke"/>`
+        },
+        stamp: {
+          shapeClass: "stamp-press",
+          pos: "right: -440px; bottom: 25px;",
+          badge: "📰 1945 TIMES INTERVIEW",
+          main: "INTERVIEWED MAHATMA GANDHI",
+          time: 13.5
+        }
+      },
+      {
+        id: "11_apj_abdul_kalam",
+        name: "Dr. A. P. J. Abdul Kalam",
+        year: "2002",
+        term: "2002 – 2007",
+        duration: 17,
+        x: 16000,
+        y: 400,
+        img: "assets/images/11_apj_abdul_kalam.png",
+        fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/A._P._J._Abdul_Kalam_official_portrait.jpg/440px-A._P._J._Abdul_Kalam_official_portrait.jpg",
+        bgImg: "assets/images/11_apj_abdul_kalam_bg.png",
+        bgMeta: { title: "Pokhran-II Desert & SLV-3 Rocket Gantry", bottom: "25px", w: "510px", h: "430px", opacity: 0.9 },
+        // e1 (First in VO): Invited childhood cobbler to oath -> Placed LEFT (+20% Bigger)
+        e1: {
+          side: "left",
+          pos: "left: -440px; top: 40px; width: 420px;",
+          rot: -3.5,
+          theme: "headline-gold",
+          fontSize: "44px",
+          iconSize: "96px",
+          title: "COBBLER AS VIP GUEST",
+          sub: "Invited Childhood Friends to Oath",
+          time: 3.0,
+          svg: `<path d="M18 56c13-9 20-9 32-2l24 4v10H18z" class="drawn-stroke"/><circle cx="30" cy="50" r="3.5" class="drawn-stroke"/><path d="M18 34l11 11" class="drawn-stroke"/>`
+        },
+        // e2 (Second in VO): Newspaper boy to missile defense -> Placed RIGHT (-20% Compact, at ~9.0s)
+        e2: {
+          side: "right",
+          pos: "right: -420px; top: 80px; width: 340px;",
+          rot: 3.0,
+          theme: "headline-crimson",
+          fontSize: "32px",
+          iconSize: "68px",
+          title: "POKHRAN & AGNI MISSILE",
+          sub: "Engineered India's Missile Shield",
+          time: 9.0,
+          svg: `<path d="M34 9c5 5 10 16 10 27l-7 4-4-5-4 5-7-4c0-11 5-22 10-27z" class="drawn-stroke"/><circle cx="34" cy="21" r="3" class="drawn-stroke"/><path d="M30 41l4 9 4-9" stroke="#ff3b47" stroke-width="2.5" class="drawn-stroke"/>`
+        },
+        stamp: {
+          shapeClass: "stamp-cheque",
+          pos: "left: -440px; bottom: 25px;",
+          badge: "🧾 PERSONAL BANK ACCOUNT",
+          main: "PAID RELATIVES' HOTEL BILL",
+          time: 13.5
+        }
+      },
+      {
+        id: "12_pratibha_patil",
+        name: "Pratibha Devisingh Patil",
+        year: "2007",
+        term: "2007 – 2012",
+        duration: 18,
+        x: 17600,
+        y: -380,
+        img: "assets/images/12_pratibha_patil.png",
+        fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Pratibha_Patil_official_portrait.jpg/440px-Pratibha_Patil_official_portrait.jpg",
+        bgImg: "assets/images/12_pratibha_patil_bg.png",
+        bgMeta: { title: "Sukhoi-30 Fighter Jet & Runway Tarmac", bottom: "20px", w: "510px", h: "420px", opacity: 0.9 },
+        // e1 (First in VO): Shattered 60-year glass ceiling -> Placed RIGHT (+20% Bigger)
+        e1: {
+          side: "right",
+          pos: "right: -440px; top: 40px; width: 420px;",
+          rot: 3.5,
+          theme: "headline-gold",
+          fontSize: "44px",
+          iconSize: "96px",
+          title: "60-YEAR GLASS CEILING",
+          sub: "First Woman Supreme Commander",
+          time: 3.2,
+          svg: `<polygon points="48,14 74,30 60,62 28,54 22,28" class="drawn-stroke"/><path d="M48 14l11 48M28 54l46-24" class="drawn-stroke"/>`
+        },
+        // e2 (Second in VO): Sukhoi-30 Mach speed at 74 -> Placed LEFT (-20% Compact, at ~9.0s)
+        e2: {
+          side: "left",
+          pos: "left: -420px; top: 80px; width: 340px;",
+          rot: -2.8,
+          theme: "headline-cyan",
+          fontSize: "32px",
+          iconSize: "68px",
+          title: "MACH 2.0 SUPERSONIC",
+          sub: "Sukhoi-30 Sortie at Age 74",
+          time: 9.0,
+          svg: `<path d="M34 11l7 16 18 7-18 3-3 14-3-14-18-3 18-7z" class="drawn-stroke"/><circle cx="34" cy="27" r="3.5" class="drawn-stroke"/>`
+        },
+        stamp: {
+          shapeClass: "stamp-rosette",
+          pos: "right: -440px; bottom: 25px;",
+          badge: "🏓 STATE ATHLETICS ACE",
+          main: "TABLE TENNIS CHAMPION",
+          time: 14.5
+        }
+      },
+      {
+        id: "13_pranab_mukherjee",
+        name: "Pranab Mukherjee",
+        year: "2012",
+        term: "2012 – 2017",
+        duration: 17,
+        x: 19200,
+        y: 340,
+        img: "assets/images/13_pranab_mukherjee.png",
+        fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Pranab_Mukherjee_official_portrait.jpg/440px-Pranab_Mukherjee_official_portrait.jpg",
+        bgImg: "assets/images/13_pranab_mukherjee_bg.png",
+        bgMeta: { title: "Circular Parliament Colonnade & Corridor", bottom: "35px", w: "490px", h: "400px", opacity: 0.88 },
+        // e1 (First in VO): 30-year budget memory -> Placed LEFT (+20% Bigger)
+        e1: {
+          side: "left",
+          pos: "left: -440px; top: 40px; width: 420px;",
+          rot: -3.5,
+          theme: "headline-gold",
+          fontSize: "44px",
+          iconSize: "96px",
+          title: "30-YEAR BUDGET MEMORY",
+          sub: "Recalled Data Without Any Notes",
+          time: 3.0,
+          svg: `<path d="M48 20c-15 0-22 10-22 20 0 10 9 14 11 20h22c2-6 11-10 11-20 0-10-8-20-22-20z" class="drawn-stroke"/><path d="M36 34c6-2 15-2 19 0" class="drawn-stroke"/>`
+        },
+        // e2 (Second in VO): Iron terror verdicts -> Placed RIGHT (-20% Compact, at ~9.0s)
+        e2: {
+          side: "right",
+          pos: "right: -420px; top: 80px; width: 340px;",
+          rot: 3.0,
+          theme: "headline-crimson",
+          fontSize: "32px",
+          iconSize: "68px",
+          title: "IRON TERROR VERDICTS",
+          sub: "Rejected Clemency Petitions",
+          time: 9.0,
+          svg: `<rect x="16" y="16" width="34" height="16" rx="2.5" class="drawn-stroke"/><path d="M34 32v20M26 52h16" class="drawn-stroke" stroke-width="3.5"/>`
+        },
+        stamp: {
+          shapeClass: "stamp-diary",
+          pos: "left: -440px; bottom: 25px;",
+          badge: "📔 CONFIDENTIAL ARCHIVES",
+          main: "40 YEARS SECRET DIARIES",
+          time: 13.5
+        }
+      },
+      {
+        id: "14_ram_nath_kovind",
+        name: "Ram Nath Kovind",
+        year: "2017",
+        term: "2017 – 2022",
+        duration: 17,
+        x: 20800,
+        y: -310,
+        img: "assets/images/14_ram_nath_kovind.png",
+        fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Ram_Nath_Kovind_official_portrait.jpg/440px-Ram_Nath_Kovind_official_portrait.jpg",
+        bgImg: "assets/images/14_ram_nath_kovind_bg.png",
+        bgMeta: { title: "Courthouse Marble Steps & Ashoka Pillar", bottom: "30px", w: "480px", h: "410px", opacity: 0.88 },
+        // e1 (First in VO): Burnt mud hut -> Placed RIGHT (+20% Bigger)
+        e1: {
+          side: "right",
+          pos: "right: -440px; top: 40px; width: 420px;",
+          rot: 3.5,
+          theme: "headline-gold",
+          fontSize: "44px",
+          iconSize: "96px",
+          title: "MUD HUT TO RAISINA",
+          sub: "Childhood Home Burnt in Storm",
+          time: 3.0,
+          svg: `<path d="M20 70l28-40 28 40H20z" class="drawn-stroke"/><path d="M34 70v-18h24v18M24 28l14-14 10 10" class="drawn-stroke"/>`
+        },
+        // e2 (Second in VO): Kneeled in village soil -> Placed LEFT (-20% Compact, at ~9.0s)
+        e2: {
+          side: "left",
+          pos: "left: -420px; top: 80px; width: 340px;",
+          rot: -2.8,
+          theme: "headline-cyan",
+          fontSize: "32px",
+          iconSize: "68px",
+          title: "KNEELED IN VILLAGE SOIL",
+          sub: "Arrived by Presidential Train",
+          time: 9.0,
+          svg: `<path d="M14 48c12-10 24-10 36 0" class="drawn-stroke"/><circle cx="32" cy="27" r="9" class="drawn-stroke"/>`
+        },
+        stamp: {
+          shapeClass: "stamp-deed",
+          pos: "right: -440px; bottom: 25px;",
+          badge: "🏡 ANCESTRAL GIFT DEED",
+          main: "DONATED ANCESTRAL HOME",
+          time: 13.5
+        }
+      },
+      {
+        id: "15_droupadi_murmu",
+        name: "Smt. Droupadi Murmu",
+        year: "2022",
+        term: "2022 – Present",
+        duration: 21,
+        x: 22400,
+        y: 10,
+        img: "assets/images/15_droupadi_murmu.png",
+        fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Droupadi_Murmu_official_portrait.jpg/440px-Droupadi_Murmu_official_portrait.jpg",
+        bgImg: "assets/images/15_droupadi_murmu_bg.png",
+        bgMeta: { title: "New Parliament & Santhali Stone Plinth", bottom: "25px", w: "500px", h: "420px", opacity: 0.9 },
+        // e1 (First in VO): Converted home to free school -> Placed LEFT (+20% Bigger)
+        e1: {
+          side: "left",
+          pos: "left: -440px; top: 40px; width: 420px;",
+          rot: -3.5,
+          theme: "headline-gold",
+          fontSize: "44px",
+          iconSize: "96px",
+          title: "TRIUMPH OVER TRAGEDY",
+          sub: "Home Converted to Free School",
+          time: 3.2,
+          svg: `<path d="M18 42l26-22 26 22v24H18z" class="drawn-stroke"/><path d="M32 66v-16h16v16" class="drawn-stroke"/><circle cx="44" cy="30" r="5" class="drawn-stroke"/>`
+        },
+        // e2 (Second in VO): 1st tribal president -> Placed RIGHT (-20% Compact, at ~9.2s)
+        e2: {
+          side: "right",
+          pos: "right: -420px; top: 80px; width: 340px;",
+          rot: 3.0,
+          theme: "headline-cyan",
+          fontSize: "32px",
+          iconSize: "68px",
+          title: "1ST TRIBAL PRESIDENT",
+          sub: "Youngest Head of Indian Republic",
+          time: 9.2,
+          svg: `<path d="M34 11c-10 10-14 23-5 35 3 5 14 5 18 0 9-12 5-25-13-35z" class="drawn-stroke"/><path d="M34 21v26" class="drawn-stroke"/>`
+        },
+        stamp: {
+          shapeClass: "stamp-lotus",
+          pos: "left: -440px; bottom: 25px;",
+          badge: "👁️ VISION BANK DONOR",
+          main: "PLEDGED EYES & SLS TRUST",
+          time: 17.0
+        }
+      }
+    ];
+
+    const world = document.getElementById('canvas-world');
+    const svgConnections = document.getElementById('svg-connections');
+
+    // Organic Wobbly Rectangle Path for 480x700 card (perimeter ~ 2460px)
+    const handmadeCardD = "M 32 8 C 145 4, 355 12, 470 7 C 492 8, 502 24, 500 48 C 504 190, 498 540, 501 688 C 500 710, 488 724, 466 723 C 340 726, 145 721, 34 724 C 16 723, 6 708, 8 688 C 5 550, 10 190, 7 48 C 6 26, 16 8, 32 8 Z";
+
+    // 1. Build All 15 President Nodes with Asymmetric Kinetic Elements
+    PRESIDENTS.forEach((p, i) => {
+      const node = document.createElement('div');
+      node.className = 'pres-node';
+      node.id = `node-${i}`;
+      node.style.left = `${p.x}px`;
+      node.style.top = `${p.y}px`;
+
+      node.innerHTML = `
+        <!-- Main Center Subject Card -->
+        <div class="card-core" id="core-${i}">
+          <svg class="handmade-border-svg" viewBox="0 0 508 732">
+            <path id="border-path-${i}" class="progressive-border-path" d="${handmadeCardD}" stroke-dasharray="2460" stroke-dashoffset="2460" />
+          </svg>
+          <div class="year-behind-head" data-layout-allow-overlap="true" data-layout-allow-occlusion="true">${p.year}</div>
+
+          <!-- Layer 2: Background Landmark Cutout (translateZ: 10px) -->
+          <div class="bg-landmark-box" id="bg-landmark-${i}" style="bottom: ${p.bgMeta.bottom}; width: ${p.bgMeta.w}; height: ${p.bgMeta.h}; opacity: ${p.bgMeta.opacity};">
+            <img class="bg-landmark-img" src="${p.bgImg}" onerror="this.style.opacity='0'" alt="${p.bgMeta.title}">
+          </div>
+
+          <!-- Layer 3: Foreground President Cutout (translateZ: 85px for Heavy 2.5D Parallax) -->
+          <div class="cutout-box" id="cutout-${i}">
+            <img class="cutout-img" src="${p.img}" onerror="this.src='${p.fallbackImg}'" alt="${p.name}">
+          </div>
+
+          <!-- Layer 4: Card Bottom Details -->
+          <div class="card-details" id="card-details-${i}">
+            <span class="term-badge">${p.term}</span>
+            <h2 class="pres-name">${p.name}</h2>
+          </div>
+        </div>
+
+        <!-- FREESTANDING KINETIC ELEMENT 1 (Voiceover Event 1) -->
+        <div class="canvas-group" id="elem-1-${i}" style="${p.e1.pos} transform: rotate(${p.e1.rot}deg);">
+          <div class="group-icon-wrap" id="icon-1-${i}" style="width: ${p.e1.iconSize}; height: ${p.e1.iconSize};">
+            <svg class="motion-svg-art" viewBox="0 0 88 88">${p.e1.svg}</svg>
+          </div>
+          <div class="group-headline ${p.e1.theme}" id="head-1-${i}" style="font-size: ${p.e1.fontSize};">${p.e1.title}</div>
+          <div class="group-sub" id="sub-1-${i}">✦ ${p.e1.sub}</div>
+        </div>
+
+        <!-- FREESTANDING KINETIC ELEMENT 2 (Voiceover Event 2 - Just before 10s mark) -->
+        <div class="canvas-group" id="elem-2-${i}" style="${p.e2.pos} transform: rotate(${p.e2.rot}deg);">
+          <div class="group-icon-wrap" id="icon-2-${i}" style="width: ${p.e2.iconSize}; height: ${p.e2.iconSize};">
+            <svg class="motion-svg-art" viewBox="0 0 88 88">${p.e2.svg}</svg>
+          </div>
+          <div class="group-headline ${p.e2.theme}" id="head-2-${i}" style="font-size: ${p.e2.fontSize};">${p.e2.title}</div>
+          <div class="group-sub" id="sub-2-${i}">✦ ${p.e2.sub}</div>
+        </div>
+
+        <!-- 3RD ELEMENT: BESPOKE BIG IMPACT STAMP (Last 3.5s) -->
+        <div class="impact-stamp-card ${p.stamp.shapeClass}" id="stamp-${i}" style="${p.stamp.pos}">
+          <div class="stamp-micro-badge">${p.stamp.badge}</div>
+          <div class="stamp-main-text">${p.stamp.main}</div>
+        </div>
+      `;
+      world.appendChild(node);
+
+      // Connecting Curved Line to next node across 2D plane
+      if (i > 0) {
+        const prev = PRESIDENTS[i - 1];
+        const midX = (prev.x + p.x) / 2;
+        const midY = (prev.y + p.y) / 2 + (i % 2 === 0 ? 180 : -180);
+        const arrow = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        arrow.setAttribute("class", "connector-line");
+        arrow.setAttribute("id", `arrow-${i}`);
+        arrow.setAttribute("d", `M ${prev.x + 240} ${prev.y} Q ${midX} ${midY} ${p.x - 240} ${p.y}`);
+        arrow.setAttribute("stroke-dasharray", "1800");
+        arrow.setAttribute("stroke-dashoffset", "1800");
+        svgConnections.appendChild(arrow);
+      }
+    });
+
+    // 2. HyperFrames Deterministic GSAP Timeline Setup
+    const tl = gsap.timeline({ paused: true });
+    window.__timelines = window.__timelines || {};
+    window.__timelines.main = tl;
+
+    // Full Animated Hand-Drawn Gradient Progress Bar from 0 to 268s
+    tl.fromTo("#progressFillPath", 
+      { strokeDashoffset: 1760 }, 
+      { strokeDashoffset: 0, duration: 268, ease: "none" }, 
+      0
+    );
+
+    // Dynamic gradient color shift across the 268 seconds
+    const gradientStops = [
+      { t: 0, s1: "#ff3b47", s2: "#ffbe3b", s3: "#00f2fe", s4: "#4facfe" },
+      { t: 56, s1: "#ffbe3b", s2: "#00f2fe", s3: "#4facfe", s4: "#7000ff" },
+      { t: 110, s1: "#00f2fe", s2: "#4facfe", s3: "#7000ff", s4: "#ff007f" },
+      { t: 178, s1: "#4facfe", s2: "#ff3b47", s3: "#ffbe3b", s4: "#00f2fe" },
+      { t: 230, s1: "#ffbe3b", s2: "#ff3b47", s3: "#7000ff", s4: "#fffdf2" }
+    ];
+
+    gradientStops.forEach(stop => {
+      tl.to("#stop1", { stopColor: stop.s1, duration: 10, ease: "sine.inOut" }, stop.t);
+      tl.to("#stop2", { stopColor: stop.s2, duration: 10, ease: "sine.inOut" }, stop.t);
+      tl.to("#stop3", { stopColor: stop.s3, duration: 10, ease: "sine.inOut" }, stop.t);
+      tl.to("#stop4", { stopColor: stop.s4, duration: 10, ease: "sine.inOut" }, stop.t);
+    });
+
+    let timeOffset = 0;
+
+    PRESIDENTS.forEach((p, i) => {
+      const node = `#node-${i}`;
+      const core = `#core-${i}`;
+      const border = `#border-path-${i}`;
+      const bgLandmark = `#bg-landmark-${i}`;
+      const cutout = `#cutout-${i}`;
+      const details = `#card-details-${i}`;
+
+      const icon1 = `#icon-1-${i}`;
+      const head1 = `#head-1-${i}`;
+      const sub1 = `#sub-1-${i}`;
+      const svgStroke1 = `#icon-1-${i} .drawn-stroke`;
+
+      const icon2 = `#icon-2-${i}`;
+      const head2 = `#head-2-${i}`;
+      const sub2 = `#sub-2-${i}`;
+      const svgStroke2 = `#icon-2-${i} .drawn-stroke`;
+
+      const stamp = `#stamp-${i}`;
+
+      const t = timeOffset;
+      const dur = p.duration;
+
+      if (i === 0) {
+        // Initial Scene Focus (Center Node Lands)
+        tl.set("#canvas-world", { x: -p.x, y: -p.y }, 0);
+        tl.set(node, { scale: 1, opacity: 1, z: 45 }, 0);
+        tl.set("#counterIndicator", { textContent: "01 / 15" }, 0);
+
+        // Year reveals behind head
+        tl.fromTo(`${node} .year-behind-head`, { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 0.2);
+
+        // Background Landmark Cutout appears
+        tl.fromTo(bgLandmark, { scale: 0.92, opacity: 0, z: -10 }, { scale: 1, opacity: p.bgMeta.opacity, z: 10, duration: 0.7, ease: "power2.out" }, 0.4);
+
+        // Foreground President Cutout drops with realistic bounce
+        tl.fromTo(cutout, { y: 45, scale: 0.92, opacity: 0, z: 40 }, { y: 0, scale: 1, opacity: 1, z: 85, duration: 0.75, ease: "back.out(1.4)" }, 0.7);
+
+        // Card Bottom Details illuminate
+        tl.fromTo(details, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5 }, 1.0);
+
+        // Progressive Border: Runs through the ENTIRE duration of this audio
+        tl.fromTo(border, { strokeDashoffset: 2460 }, { strokeDashoffset: 0, duration: dur, ease: "linear" }, 0);
+
+        // ==============================================================
+        // ELEMENT 1 REVEAL SEQUENCE (Voiceover Event 1 at ~3.0s)
+        // Icon -> Big Text -> Small Text
+        // ==============================================================
+        const e1Start = p.e1.time;
+        tl.fromTo(icon1, 
+          { scale: 0, opacity: 0, rotate: -20 }, 
+          { scale: 1, opacity: 1, rotate: 0, duration: 0.5, ease: "back.out(1.8)" }, 
+          e1Start
+        );
+        tl.fromTo(svgStroke1, 
+          { strokeDasharray: 300, strokeDashoffset: 300 }, 
+          { strokeDashoffset: 0, duration: 0.85, ease: "power2.out" }, 
+          e1Start + 0.1
+        );
+        tl.fromTo(head1, 
+          { opacity: 0, y: 24, filter: "blur(6px)" }, 
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.55, ease: "power3.out" }, 
+          e1Start + 0.35
+        );
+        tl.fromTo(sub1, 
+          { opacity: 0, x: -14 }, 
+          { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" }, 
+          e1Start + 0.65
+        );
+
+        // ==============================================================
+        // ELEMENT 2 REVEAL SEQUENCE (Voiceover Event 2 at ~9.0s mark)
+        // Icon -> Big Text -> Small Text
+        // ==============================================================
+        const e2Start = p.e2.time;
+        tl.fromTo(icon2, 
+          { scale: 0, opacity: 0, rotate: 20 }, 
+          { scale: 1, opacity: 1, rotate: 0, duration: 0.5, ease: "back.out(1.8)" }, 
+          e2Start
+        );
+        tl.fromTo(svgStroke2, 
+          { strokeDasharray: 300, strokeDashoffset: 300 }, 
+          { strokeDashoffset: 0, duration: 0.85, ease: "power2.out" }, 
+          e2Start + 0.1
+        );
+        tl.fromTo(head2, 
+          { opacity: 0, y: 24, filter: "blur(6px)" }, 
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.55, ease: "power3.out" }, 
+          e2Start + 0.35
+        );
+        tl.fromTo(sub2, 
+          { opacity: 0, x: 14 }, 
+          { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" }, 
+          e2Start + 0.65
+        );
+
+        // ==============================================================
+        // 3RD ELEMENT: MASSIVE IMPACT STAMP SLAM (Last 3.5s)
+        // Heavy Ink Slam Overshoot
+        // ==============================================================
+        const stampStart = p.stamp.time;
+        tl.fromTo(stamp, 
+          { scale: 2.2, opacity: 0, rotate: -12 }, 
+          { scale: 1, opacity: 1, rotate: -3, duration: 0.55, ease: "back.out(2.5)" }, 
+          stampStart
+        );
+
+      } else {
+        const transStart = Math.max(0, t - 0.7);
+        const prevNode = `#node-${i - 1}`;
+        const arrow = `#arrow-${i}`;
+        const prevArrow = `#arrow-${i - 1}`;
+
+        // Previous node gently blurs and recedes
+        tl.to(prevNode, { scale: 0.75, opacity: 0.08, filter: "blur(14px)", duration: 0.9, ease: "power2.inOut" }, transStart);
+
+        // Camera glides along infinite 2D canvas exactly on the beat
+        tl.to("#canvas-world", { x: -p.x, y: -p.y, duration: 1.1, ease: "power3.inOut" }, transStart);
+
+        // Connector line draws bright
+        tl.fromTo(arrow, { strokeDashoffset: 1800, opacity: 1 }, { strokeDashoffset: 0, opacity: 1, duration: 1.0, ease: "power2.out" }, transStart + 0.1);
+
+        // Current node enters focus from blur
+        tl.fromTo(node, { scale: 0.85, opacity: 0.12, filter: "blur(12px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", z: 45, duration: 0.9, ease: "power2.out" }, transStart + 0.3);
+
+        // Fade previous connector line after node settles
+        tl.to(arrow, { opacity: 0.12, duration: 0.8, ease: "power2.inOut" }, t + 0.8);
+        if (i > 1) {
+          tl.to(prevArrow, { opacity: 0.06, duration: 0.5 }, transStart);
+        }
+
+        // Progressive Border
+        tl.fromTo(border, { strokeDashoffset: 2460 }, { strokeDashoffset: 0, duration: dur, ease: "linear" }, t);
+
+        // Year behind head reveals
+        tl.fromTo(`${node} .year-behind-head`, { y: -25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, t + 0.2);
+
+        // Background Landmark Cutout appears
+        tl.fromTo(bgLandmark, { scale: 0.92, opacity: 0, z: -10 }, { scale: 1, opacity: p.bgMeta.opacity, z: 10, duration: 0.7, ease: "power2.out" }, t + 0.35);
+
+        // Foreground President Cutout drops with weight
+        tl.fromTo(cutout, { y: 40, scale: 0.92, opacity: 0, z: 40 }, { y: 0, scale: 1, opacity: 1, z: 85, duration: 0.75, ease: "back.out(1.4)" }, t + 0.65);
+
+        // Card Bottom Details illuminate
+        tl.fromTo(details, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5 }, t + 0.95);
+
+        // Counter update
+        tl.set("#counterIndicator", { textContent: `${String(i + 1).padStart(2, '0')} / 15` }, transStart + 0.6);
+
+        // ==============================================================
+        // ELEMENT 1 REVEAL (Voiceover Event 1 at ~3.0s)
+        // ==============================================================
+        const e1Start = t + p.e1.time;
+        tl.fromTo(icon1, 
+          { scale: 0, opacity: 0, rotate: -20 }, 
+          { scale: 1, opacity: 1, rotate: 0, duration: 0.5, ease: "back.out(1.8)" }, 
+          e1Start
+        );
+        tl.fromTo(svgStroke1, 
+          { strokeDasharray: 300, strokeDashoffset: 300 }, 
+          { strokeDashoffset: 0, duration: 0.85, ease: "power2.out" }, 
+          e1Start + 0.1
+        );
+        tl.fromTo(head1, 
+          { opacity: 0, y: 24, filter: "blur(6px)" }, 
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.55, ease: "power3.out" }, 
+          e1Start + 0.35
+        );
+        tl.fromTo(sub1, 
+          { opacity: 0, x: -14 }, 
+          { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" }, 
+          e1Start + 0.65
+        );
+
+        // ==============================================================
+        // ELEMENT 2 REVEAL (Voiceover Event 2 at ~9.0s mark)
+        // ==============================================================
+        const e2Start = t + p.e2.time;
+        tl.fromTo(icon2, 
+          { scale: 0, opacity: 0, rotate: 20 }, 
+          { scale: 1, opacity: 1, rotate: 0, duration: 0.5, ease: "back.out(1.8)" }, 
+          e2Start
+        );
+        tl.fromTo(svgStroke2, 
+          { strokeDasharray: 300, strokeDashoffset: 300 }, 
+          { strokeDashoffset: 0, duration: 0.85, ease: "power2.out" }, 
+          e2Start + 0.1
+        );
+        tl.fromTo(head2, 
+          { opacity: 0, y: 24, filter: "blur(6px)" }, 
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.55, ease: "power3.out" }, 
+          e2Start + 0.35
+        );
+        tl.fromTo(sub2, 
+          { opacity: 0, x: 14 }, 
+          { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" }, 
+          e2Start + 0.65
+        );
+
+        // ==============================================================
+        // 3RD ELEMENT: MASSIVE IMPACT STAMP SLAM (Last 3.5s)
+        // ==============================================================
+        const stampStart = t + p.stamp.time;
+        tl.fromTo(stamp, 
+          { scale: 2.2, opacity: 0, rotate: -12 }, 
+          { scale: 1, opacity: 1, rotate: -3, duration: 0.55, ease: "back.out(2.5)" }, 
+          stampStart
+        );
+      }
+
+      // ⭐️ DRAMATIC 2.5D OPTICAL PARALLAX BETWEEN CENTER PNGs
+      // Background landmark drifts slowly in one direction:
+      tl.to(bgLandmark, { x: -20, y: 12, scale: 1.05, duration: dur - 1.2, ease: "sine.inOut" }, t + 0.8);
+      // Foreground president cutout drifts faster in opposite direction:
+      tl.to(cutout, { x: 24, y: -16, duration: dur - 1.2, ease: "sine.inOut" }, t + 0.8);
+
+      timeOffset += dur;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "presidents-hyperframes",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "lint": "npx hyperframes lint",
+    "render": "npx hyperframes render index.html -o output/presidents_timeline.mp4",
+    "generate:voice": "node voice.js",
+    "generate:assets": "node generate-presidents-assets.js"
+  },
+  "devDependencies": {
+    "hyperframes": "latest"
+  }
+}

@@ -1,0 +1,55 @@
+name: Render HyperFrames Video
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch: # GitHub वेबसाइट से 'Run workflow' बटन दबाकर कभी भी मैन्युअली चलाने के लिए
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      # 1. कोड और अपलोड किए गए सभी एसेट्स चेकआउट करें
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Node.js 24 (Latest LTS) सेट अप करें
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      # 3. FFmpeg और आवश्यक सिस्टम फोंट्स इंस्टॉल करें
+      - name: Install FFmpeg & Fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-liberation fonts-noto-color-emoji fontconfig
+
+      # 4. प्रोजेक्ट डिपेंडेंसीज़ इंस्टॉल करें
+      - name: Install Project Dependencies
+        run: npm install
+
+      # 5. हेडलेस Chromium और उसके सभी आवश्यक Linux ड्राइवर्स इंस्टॉल करें
+      - name: Install Headless Browser Dependencies
+        run: npx playwright install --with-deps chromium
+
+      # 6. HyperFrames लिंटर चेक करें (100% पास सुनिश्चित करने के लिए)
+      - name: Verify Composition Lint
+        run: npx hyperframes lint
+
+      # 7. वीडियो रेंडर करें (268 सेकंड्स MP4 एक्सपोर्ट)
+      - name: Render HyperFrames Composition to MP4
+        run: |
+          mkdir -p output
+          npx hyperframes render index.html -o output/presidents_timeline.mp4
+
+      # 8. तैयार वीडियो को GitHub Artifacts पर अपलोड करें (Latest v4)
+      - name: Upload Final Video Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: presidents-timeline-final
+          path: output/presidents_timeline.mp4
+          retention-days: 14

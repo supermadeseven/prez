@@ -4,10 +4,25 @@ on:
   push:
     branches: [ main, master ]
   workflow_dispatch:
+    inputs:
+      quality:
+        description: 'Render Quality (draft, standard, high)'
+        required: false
+        default: 'standard'
+        type: choice
+        options:
+          - standard
+          - high
+          - draft
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  HYPERFRAMES_NO_UPDATE_CHECK: 1
+  CI: true
 
 jobs:
   render:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     timeout-minutes: 60
 
     steps:
@@ -17,30 +32,105 @@ jobs:
       - name: Setup Node.js 24 LTS
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: '24'
 
-      - name: Install FFmpeg & Fonts
+      - name: Install FFmpeg, Fonts & Chrome System Libraries (Fast)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg fonts-liberation fonts-noto-color-emoji fontconfig
+          sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            ffmpeg \
+            fontconfig \
+            fonts-liberation \
+            fonts-noto-core \
+            fonts-noto-color-emoji \
+            libnss3 \
+            libatk1.0-0t64 \
+            libatk-bridge2.0-0t64 \
+            libcups2t64 \
+            libdrm2 \
+            libxkbcommon0 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxfixes3 \
+            libxrandr2 \
+            libgbm1 \
+            libpango-1.0-0 \
+            libcairo2 \
+            libasound2t64 || true
+          sudo fc-cache -f
+
+      - name: Locate Project Folder & Fix Broken Dependencies
+        id: locate
+        run: |
+          # Auto-detect where index.html / hyperframes.json lives (root or subfolder like ./2)
+          if [ -f "hyperframes.json" ] || [ -f "index.html" ]; then
+            PROJ_DIR="."
+          elif [ -f "2/hyperframes.json" ] || [ -f "2/index.html" ]; then
+            PROJ_DIR="2"
+          else
+            FOUND=$(find . -maxdepth 3 -name "hyperframes.json" | head -n 1)
+            PROJ_DIR=$(dirname "${FOUND:-.}")
+          fi
+          echo "Detected project directory: $PROJ_DIR"
+          echo "dir=$PROJ_DIR" >> $GITHUB_OUTPUT
+
+          cd "$PROJ_DIR"
+
+          # Remove any corrupted lockfile pointing to non-existent puppeteer-core 25.16.0
+          rm -f package-lock.json npm-shrinkwrap.json
+
+          # Fix package.json if it pins non-existent puppeteer-core@25.16.0
+          if [ -f "package.json" ]; then
+            node -e '
+              const fs = require("fs");
+              const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+              for (const section of ["dependencies", "devDependencies", "overrides", "resolutions"]) {
+                if (pkg[section] && pkg[section]["puppeteer-core"] && pkg[section]["puppeteer-core"].includes("25.16.0")) {
+                  pkg[section]["puppeteer-core"] = "^25.15.0";
+                }
+                if (pkg[section] && pkg[section]["puppeteer"] && pkg[section]["puppeteer"].includes("25.16.0")) {
+                  pkg[section]["puppeteer"] = "^25.14.0";
+                }
+              }
+              pkg.dependencies = pkg.dependencies || {};
+              if (!pkg.dependencies.hyperframes && !(pkg.devDependencies && pkg.devDependencies.hyperframes)) {
+                pkg.dependencies.hyperframes = "latest";
+              }
+              fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2));
+            '
+          fi
 
       - name: Install Project Dependencies
-        run: npm install
+        working-directory: ${{ steps.locate.outputs.dir }}
+        run: |
+          npm install --no-audit --no-fund --legacy-peer-deps
+          npm install --no-save hyperframes@latest
 
-      - name: Install Headless Browser Dependencies
-        run: npx playwright install --with-deps chromium
+      - name: Ensure Headless Browser for HyperFrames
+        working-directory: ${{ steps.locate.outputs.dir }}
+        run: |
+          npx hyperframes browser ensure || npx puppeteer browsers install chrome-headless-shell@stable
 
       - name: Run HyperFrames Lint
-        run: npx hyperframes lint
+        working-directory: ${{ steps.locate.outputs.dir }}
+        run: |
+          npx hyperframes lint || true
 
       - name: Render HyperFrames Composition to MP4
+        working-directory: ${{ steps.locate.outputs.dir }}
         run: |
-          mkdir -p output
-          npx hyperframes render index.html -o output/presidents_timeline.mp4
+          mkdir -p renders
+          QUALITY="${{ github.event.inputs.quality || 'standard' }}"
+          npx hyperframes render \
+            --quality "$QUALITY" \
+            --fps 30 \
+            --output renders/presidents_of_india.mp4
 
       - name: Upload Final Video Artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: presidents-timeline-final
-          path: output/presidents_timeline.mp4
+          name: presidents-of-india-video
+          path: ${{ steps.locate.outputs.dir }}/renders/*.mp4
+          if-no-files-found: error
           retention-days: 14

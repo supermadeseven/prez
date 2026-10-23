@@ -3,19 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1920, height=1080">
-  <title>Presidents of India | Master Dynamic 2.5D Motion Canvas</title>
+  <title>Presidents of India | Master 2.5D Freestanding Narrative Canvas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Caveat:wght@700&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
   <style>
     :root {
-      --bg-void: #040608;
-      --card-bg: rgba(12, 16, 25, 0.94);
+      --bg-void: #030508;
+      --card-bg: rgba(10, 14, 22, 0.93);
       --glow-line: #fffdf2;
       --glow-warm: rgba(255, 238, 170, 0.85);
       --accent-gold: #ffbe3b;
-      --bar-glow: rgba(255, 190, 59, 0.6);
+      --accent-crimson: #ff3b47;
+      --accent-cyan: #00f2fe;
+      --bar-glow: rgba(255, 190, 59, 0.65);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -31,10 +33,20 @@
       width: 1920px;
       height: 1080px;
       overflow: hidden;
-      background: radial-gradient(circle at 50% 50%, #151b2a 0%, #07090f 55%, var(--bg-void) 100%);
+      background: #04060a;
     }
 
-    /* Ambient Matrix Grid & Deep Cinematic Vignette */
+    /* =========================================================================
+       ATMOSPHERIC BURNING FLARES, VOLUMETRIC HEAT & EMBER ENGINE
+       ========================================================================= */
+    #mood-backdrop {
+      position: absolute;
+      inset: -150px;
+      background: radial-gradient(circle at 50% 50%, rgba(35, 24, 15, 0.8) 0%, rgba(7, 10, 18, 0.94) 58%, #020305 100%);
+      pointer-events: none;
+      z-index: 0;
+      will-change: background;
+    }
     .ambient-grid {
       position: absolute;
       inset: -3500px;
@@ -44,13 +56,39 @@
         linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
       background-size: 75px 75px, 75px 75px, 75px 75px;
       pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Burning Flares & Glowing Embers SVG Layer */
+    #burning-flares-svg {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      pointer-events: none;
+      z-index: 2;
+      mix-blend-mode: screen;
+      overflow: visible;
+    }
+    .burning-flare-orb {
+      transform-origin: center center;
+      will-change: transform, opacity;
+    }
+    #heat-flare-burst {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 55%, rgba(255, 120, 35, 0.38) 0%, rgba(255, 50, 40, 0.14) 45%, transparent 75%);
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 3;
+      mix-blend-mode: screen;
     }
     .vignette-fader {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at center, transparent 35%, rgba(4, 6, 8, 0.94) 100%);
+      background: radial-gradient(circle at center, transparent 35%, rgba(2, 4, 7, 0.94) 100%);
       pointer-events: none;
-      z-index: 2;
+      z-index: 4;
     }
 
     /* Top Right Minimalist Index Pill */
@@ -62,13 +100,13 @@
       font-size: 15px;
       font-weight: 900;
       letter-spacing: 2.5px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 253, 242, 0.28);
-      backdrop-filter: blur(14px);
-      padding: 10px 26px;
+      background: rgba(12, 18, 28, 0.78);
+      border: 1px solid rgba(255, 253, 242, 0.32);
+      backdrop-filter: blur(16px);
+      padding: 10px 28px;
       border-radius: 30px;
       color: var(--glow-line);
-      box-shadow: 0 0 22px rgba(255, 238, 170, 0.18);
+      box-shadow: 0 0 28px rgba(255, 238, 170, 0.22);
       z-index: 50;
       pointer-events: none;
     }
@@ -104,33 +142,33 @@
     .connector-line {
       fill: none;
       stroke: var(--glow-line);
-      stroke-width: 2.5;
+      stroke-width: 2.8;
       stroke-linecap: round;
-      filter: drop-shadow(0 0 10px var(--glow-warm));
+      filter: drop-shadow(0 0 12px var(--glow-warm));
     }
 
     /* Main Center Presidential Node Container */
     .pres-node {
       position: absolute;
-      width: 480px;
+      width: 470px;
       height: 700px;
-      margin-left: -240px;
+      margin-left: -235px;
       margin-top: -350px;
       transform-style: preserve-3d;
       z-index: 10;
     }
 
-    /* Center Card Shell */
+    /* Center Card Shell (ONLY the President Portrait stays in a Card) */
     .card-core {
       position: relative;
       width: 100%;
       height: 100%;
       background: var(--card-bg);
       border-radius: 32px;
-      box-shadow: 0 45px 95px rgba(0, 0, 0, 0.9), 0 0 45px rgba(255, 238, 170, 0.08);
+      box-shadow: 0 45px 95px rgba(0, 0, 0, 0.92), 0 0 55px rgba(255, 238, 170, 0.1);
       backdrop-filter: blur(28px);
       transform-style: preserve-3d;
-      border: 1px solid rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
     /* Progressive Handmade Border */
@@ -149,21 +187,21 @@
       stroke-width: 3.5;
       stroke-linecap: round;
       stroke-linejoin: round;
-      filter: drop-shadow(0 0 12px var(--glow-warm)) drop-shadow(0 0 24px rgba(255, 190, 59, 0.4));
+      filter: drop-shadow(0 0 12px var(--glow-warm)) drop-shadow(0 0 24px rgba(255, 190, 59, 0.45));
     }
 
     /* Massive Year Behind Head */
     .year-behind-head {
       position: absolute;
-      top: -36px;
+      top: -38px;
       left: 50%;
       transform: translateX(-50%) translateZ(-20px);
       font-family: 'Cinzel', serif;
-      font-size: 145px;
+      font-size: 142px;
       font-weight: 900;
-      color: rgba(255, 253, 242, 0.09);
+      color: rgba(255, 253, 242, 0.095);
       letter-spacing: -3px;
-      text-shadow: 0 0 45px rgba(255, 238, 170, 0.28);
+      text-shadow: 0 0 45px rgba(255, 238, 170, 0.3);
       pointer-events: none;
       z-index: 1;
       white-space: nowrap;
@@ -214,105 +252,178 @@
     /* Bottom Card Details */
     .card-details {
       position: absolute;
-      bottom: 24px;
-      left: 28px;
-      right: 28px;
-      transform: translateZ(40px);
+      bottom: 22px;
+      left: 26px;
+      right: 26px;
+      transform: translateZ(45px);
       z-index: 6;
+      background: linear-gradient(to top, rgba(4, 6, 12, 0.92) 0%, rgba(4, 6, 12, 0.45) 75%, transparent 100%);
+      padding-top: 12px;
+      border-radius: 0 0 22px 22px;
     }
     .term-badge {
       display: inline-flex;
       font-size: 12px;
       font-weight: 800;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.8px;
       text-transform: uppercase;
       color: var(--accent-gold);
       background: rgba(255, 190, 59, 0.16);
-      border: 1px solid rgba(255, 190, 59, 0.4);
+      border: 1px solid rgba(255, 190, 59, 0.45);
       padding: 5px 15px;
       border-radius: 20px;
       margin-bottom: 6px;
     }
     .pres-name {
       font-family: 'Cinzel', serif;
-      font-size: 27px;
+      font-size: 26px;
       font-weight: 900;
       line-height: 1.2;
+      text-shadow: 0 4px 14px rgba(0, 0, 0, 0.95);
     }
 
     /* =========================================================================
-       CANVAS FREESTANDING KINETIC GROUPS (TOP MARGIN + INDIVIDUAL SIZES)
+       100% FREESTANDING CANVAS NARRATIVE SVGs & TYPOGRAPHY (NO CARDS/BOXES!)
        ========================================================================= */
     .canvas-group {
       position: absolute;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
       pointer-events: none;
       transform-style: preserve-3d;
       z-index: 25;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
     }
-
-    /* Micro-Element: SVG Icon Wrapper */
     .group-icon-wrap {
+      position: relative;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      filter: drop-shadow(0 0 16px rgba(255, 190, 59, 0.85));
+      background: transparent !important;
+      border: none !important;
+      overflow: visible;
+      filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.85));
     }
     .motion-svg-art {
       width: 100%;
       height: 100%;
       overflow: visible;
     }
-    .drawn-stroke {
+
+    /* Vector Stroke Styles */
+    .svg-part {
       fill: none;
       stroke: var(--accent-gold);
-      stroke-width: 3.2;
+      stroke-width: 2.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 10px rgba(255, 190, 59, 0.55));
+    }
+    .svg-fill-gold {
+      fill: rgba(255, 190, 59, 0.15);
+      stroke: var(--accent-gold);
+      stroke-width: 2.5;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
+    .svg-crimson {
+      fill: rgba(255, 59, 71, 0.18);
+      stroke: #ff3b47;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 12px rgba(255, 59, 71, 0.75));
+    }
+    .svg-cyan {
+      fill: rgba(0, 242, 254, 0.14);
+      stroke: #00f2fe;
+      stroke-width: 2.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 12px rgba(0, 242, 254, 0.7));
+    }
 
-    /* Punchy Kinetic Gradient Headlines */
+    /* Respective Live Action Animations on Canvas */
+    @keyframes flameDance {
+      0%, 100% { transform: scaleY(1) scaleX(1) skewX(0deg); opacity: 0.95; }
+      33% { transform: scaleY(1.12) scaleX(0.92) skewX(-4deg); opacity: 1; }
+      66% { transform: scaleY(0.93) scaleX(1.06) skewX(4deg); opacity: 0.88; }
+    }
+    @keyframes emberFloat {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-48px) scale(0.15); opacity: 0; }
+    }
+    @keyframes wheelSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes pulseShock {
+      0%, 100% { transform: scale(0.95); opacity: 0.45; }
+      50% { transform: scale(1.08); opacity: 0.95; }
+    }
+    @keyframes floatBob {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes gavelStrike {
+      0%, 100% { transform: rotate(0deg); }
+      40% { transform: rotate(-22deg); }
+      60% { transform: rotate(8deg); }
+    }
+    .act-flame-1 { transform-origin: center bottom; animation: flameDance 1.2s infinite ease-in-out; }
+    .act-flame-2 { transform-origin: center bottom; animation: flameDance 0.85s infinite ease-in-out reverse; }
+    .act-ember-1 { animation: emberFloat 1.6s infinite linear; }
+    .act-ember-2 { animation: emberFloat 2.1s infinite linear 0.5s; }
+    .act-ember-3 { animation: emberFloat 1.4s infinite linear 0.9s; }
+    .act-spin { transform-box: fill-box; transform-origin: center; animation: wheelSpin 6s infinite linear; }
+    .act-pulse { transform-box: fill-box; transform-origin: center; animation: pulseShock 2s infinite ease-in-out; }
+    .act-float { animation: floatBob 2.4s infinite ease-in-out; }
+    .act-gavel { transform-box: fill-box; transform-origin: right bottom; animation: gavelStrike 1.8s infinite ease-in-out; }
+
+    /* Freestanding Kinetic Headlines */
     .group-headline {
       font-family: 'Outfit', sans-serif;
       font-weight: 900;
-      line-height: 1.08;
+      line-height: 1.04;
       letter-spacing: -0.5px;
       text-transform: uppercase;
-      filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.9));
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.95));
     }
     .headline-gold {
-      background: linear-gradient(135deg, #ffffff 0%, #ffbe3b 60%, #ff883b 100%);
+      background: linear-gradient(135deg, #ffffff 0%, #ffdf85 45%, #ff9d1b 100%);
+      background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 15px rgba(255, 190, 59, 0.45));
     }
     .headline-cyan {
-      background: linear-gradient(135deg, #ffffff 0%, #00f2fe 55%, #4facfe 100%);
+      background: linear-gradient(135deg, #ffffff 0%, #7bf8ff 45%, #00a8ff 100%);
+      background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 15px rgba(0, 242, 254, 0.45));
     }
     .headline-crimson {
-      background: linear-gradient(135deg, #ffffff 0%, #ff4b5a 50%, #ffbe3b 100%);
+      background: linear-gradient(135deg, #ffffff 0%, #ff858d 40%, #ff2a3c 100%);
+      background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 15px rgba(255, 75, 90, 0.45));
     }
-
-    /* Handwritten Cursive Annotations */
     .group-sub {
       font-family: 'Caveat', cursive;
-      font-size: 25px;
-      color: var(--accent-gold);
+      font-size: 26px;
+      color: #ffd479;
       font-weight: 700;
-      letter-spacing: 0.5px;
-      text-shadow: 0 0 10px rgba(255, 190, 59, 0.5);
+      letter-spacing: 0.4px;
+      line-height: 1.15;
+      text-shadow: 0 4px 14px rgba(0, 0, 0, 0.95), 0 0 12px rgba(255, 190, 59, 0.45);
     }
 
     /* =========================================================================
-       EXCLUSIVE MASSIVE IMPACT STAMP (3RD ELEMENT SLAM PHYSICS)
+       3RD ELEMENT: BESPOKE IMPACT STAMP SLAM
        ========================================================================= */
     .impact-stamp-card {
       position: absolute;
@@ -320,117 +431,38 @@
       transform-style: preserve-3d;
       z-index: 35;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
-      justify-content: center;
-      text-align: center;
-      box-shadow: 0 35px 80px rgba(0, 0, 0, 0.95);
-      border-radius: 24px;
+      gap: 14px;
+      text-align: left;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 190, 59, 0.25);
+      border-radius: 18px;
+      padding: 14px 22px;
+      background: rgba(20, 14, 8, 0.92);
+      border: 2.5px solid var(--accent-gold);
+      backdrop-filter: blur(14px);
     }
-
-    /* Bespoke Physical Metaphor Shapes for Stamps */
-    .stamp-railway {
-      background: #24160a;
-      border: 3px dashed #ffbe3b;
-      padding: 16px 28px;
-      clip-path: polygon(0 0, 96% 0, 100% 15%, 96% 30%, 100% 45%, 96% 60%, 100% 75%, 96% 90%, 100% 100%, 0 100%);
+    .stamp-emblem-svg {
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 10px rgba(255, 190, 59, 0.65));
     }
-    .stamp-nobel {
-      background: radial-gradient(circle at 30% 30%, #523f0d, #1a1403);
-      border: 3.5px double #ffbe3b;
-      padding: 18px 30px;
-      box-shadow: 0 0 45px rgba(255, 190, 59, 0.5);
-    }
-    .stamp-coin {
-      background: radial-gradient(circle, #2d183d, #14081c);
-      border: 2.5px solid #c084fc;
-      padding: 16px 28px;
-    }
-    .stamp-warrant {
-      background: #280b10;
-      border-right: 6px solid #ff3b47;
-      border-top: 1.5px solid #ff3b47;
-      padding: 16px 26px;
-    }
-    .stamp-tennis {
-      background: #09261a;
-      border: 2.5px solid #10b981;
-      border-radius: 18px 18px 45px 45px;
-      padding: 18px 28px;
-    }
-    .stamp-eco {
-      background: #0f2b15;
-      border: 2.5px solid #34d399;
-      padding: 16px 26px;
-    }
-    .stamp-milestone {
-      background: #2b200b;
-      border: 3px solid #ffbe3b;
-      border-radius: 35px 35px 12px 12px;
-      padding: 18px 26px;
-    }
-    .stamp-treasury {
-      background: #241e0e;
-      border-top: 5px solid #ffbe3b;
-      padding: 16px 26px;
-    }
-    .stamp-cambridge {
-      background: #2b0b16;
-      border: 2.5px solid #f43f5e;
-      padding: 16px 26px;
-    }
-    .stamp-press {
-      background: #0a1b2b;
-      border: 2.5px solid #00f2fe;
-      padding: 16px 26px;
-    }
-    .stamp-cheque {
-      background: #261b0c;
-      border-bottom: 5px solid #f59e0b;
-      padding: 16px 26px;
-    }
-    .stamp-rosette {
-      background: #081d36;
-      border: 2.5px solid #38bdf8;
-      border-radius: 35px;
-      padding: 16px 28px;
-      box-shadow: 0 0 35px rgba(56, 189, 248, 0.4);
-    }
-    .stamp-diary {
-      background: #260e0e;
-      border-left: 6px solid #fb7185;
-      padding: 16px 26px;
-    }
-    .stamp-deed {
-      background: #261c10;
-      border: 2.5px solid #fbbf24;
-      padding: 16px 26px;
-    }
-    .stamp-lotus {
-      background: radial-gradient(circle at top, #3b220b, #140b04);
-      border: 2.5px solid #f59e0b;
-      border-radius: 30px;
-      padding: 18px 30px;
-      box-shadow: 0 0 40px rgba(245, 158, 11, 0.45);
-    }
-
     .stamp-micro-badge {
       font-size: 11px;
       font-weight: 900;
-      letter-spacing: 2.5px;
+      letter-spacing: 2.2px;
       text-transform: uppercase;
       color: var(--accent-gold);
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
     .stamp-main-text {
       font-family: 'Outfit', sans-serif;
-      font-size: 26px;
+      font-size: 22px;
       font-weight: 900;
       line-height: 1.1;
-      letter-spacing: 0.5px;
       text-transform: uppercase;
       color: #ffffff;
-      text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
     }
 
     /* Full Animated Hand-Drawn Gradient Progress Bar */
@@ -455,75 +487,114 @@
       stroke: rgba(255, 255, 255, 0.12);
       stroke-width: 4;
       stroke-linecap: round;
-      stroke-linejoin: round;
     }
     .progress-track-fill {
       fill: none;
       stroke: url(#progGradient);
       stroke-width: 5;
       stroke-linecap: round;
-      stroke-linejoin: round;
       filter: drop-shadow(0 0 12px var(--bar-glow));
     }
   </style>
 </head>
 <body>
   <!-- HyperFrames Root Composition: 268s Duration Total -->
-  <div id="root" data-composition-id="main" data-start="0" data-duration="268" data-width="1920" data-height="1080">
-    <div class="ambient-grid"></div>
-    <div class="vignette-fader"></div>
+  <div data-hf-id="hf-wvci" id="root" data-composition-id="main" data-start="0" data-duration="268" data-width="1920" data-height="1080">
+    <div id="mood-backdrop"></div>
+    <div data-hf-id="hf-dlix" class="ambient-grid"></div>
+
+    <!-- Atmospheric Burning Flares & Rising Embers Layer (NO Thunder Lines) -->
+    <svg id="burning-flares-svg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+      <defs>
+        <radialGradient id="flareGold" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#fffdf2" stop-opacity="0.9"/>
+          <stop offset="30%" stop-color="#ffbe3b" stop-opacity="0.55"/>
+          <stop offset="65%" stop-color="#ff4b2b" stop-opacity="0.2"/>
+          <stop offset="100%" stop-color="#ff4b2b" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="flareCrimson" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ffbe3b" stop-opacity="0.85"/>
+          <stop offset="40%" stop-color="#ff3b47" stop-opacity="0.45"/>
+          <stop offset="100%" stop-color="#ff3b47" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="emberDot" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+          <stop offset="50%" stop-color="#ffbe3b" stop-opacity="0.85"/>
+          <stop offset="100%" stop-color="#ff3b47" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- Volumetric Burning Flares in Background -->
+      <circle id="bg-flare-1" class="burning-flare-orb" cx="340" cy="320" r="320" fill="url(#flareGold)" opacity="0.45"/>
+      <circle id="bg-flare-2" class="burning-flare-orb" cx="1580" cy="360" r="360" fill="url(#flareCrimson)" opacity="0.4"/>
+      <circle id="bg-flare-3" class="burning-flare-orb" cx="960" cy="880" r="420" fill="url(#flareGold)" opacity="0.35"/>
+      <!-- Rising Burning Sparks & Embers -->
+      <g id="ambient-embers-layer"></g>
+    </svg>
+    <div id="heat-flare-burst"></div>
+    <div data-hf-id="hf-kkjd" class="vignette-fader"></div>
 
     <!-- Top Right Minimal Index Pill -->
-    <div class="index-pill" id="counterIndicator">01 / 15</div>
+    <div data-hf-id="hf-9ihr" class="index-pill" id="counterIndicator">01 / 15</div>
 
-    <div class="viewport">
-      <div id="canvas-world">
-        <svg id="svg-connections"></svg>
+    <div data-hf-id="hf-rhem" class="viewport">
+      <div data-hf-id="hf-rkyq" id="canvas-world">
+        <svg data-hf-id="hf-vidw" id="svg-connections"></svg>
       </div>
     </div>
 
     <!-- Full Hand-Drawn Multi-Color Animated Progress Bar -->
-    <div class="progress-bar-container">
-      <svg class="handdrawn-progress-svg" viewBox="0 0 1760 28" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="progGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop id="stop1" offset="0%" stop-color="#ff3b47" />
-            <stop id="stop2" offset="30%" stop-color="#ffbe3b" />
-            <stop id="stop3" offset="65%" stop-color="#00f2fe" />
-            <stop id="stop4" offset="100%" stop-color="#4facfe" />
+    <div data-hf-id="hf-4fj7" class="progress-bar-container">
+      <svg data-hf-id="hf-h6hw" class="handdrawn-progress-svg" viewBox="0 0 1760 28" preserveAspectRatio="none">
+        <defs data-hf-id="hf-mh0t">
+          <linearGradient data-hf-id="hf-ppwm" id="progGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop data-hf-id="hf-96gu" id="stop1" offset="0%" stop-color="#ff3b47" />
+            <stop data-hf-id="hf-y6ma" id="stop2" offset="30%" stop-color="#ffbe3b" />
+            <stop data-hf-id="hf-nsn6" id="stop3" offset="65%" stop-color="#00f2fe" />
+            <stop data-hf-id="hf-57h9" id="stop4" offset="100%" stop-color="#4facfe" />
           </linearGradient>
         </defs>
-        <path class="progress-track-bg" d="M 10 14 C 320 11, 740 17, 1100 13 C 1420 15, 1680 12, 1750 14" />
-        <path id="progressFillPath" class="progress-track-fill" d="M 10 14 C 320 11, 740 17, 1100 13 C 1420 15, 1680 12, 1750 14" stroke-dasharray="1760" stroke-dashoffset="1760" />
+        <path data-hf-id="hf-83g0" class="progress-track-bg" d="M 10 14 C 320 11, 740 17, 1100 13 C 1420 15, 1680 12, 1750 14" />
+        <path data-hf-id="hf-pt71" id="progressFillPath" class="progress-track-fill" d="M 10 14 C 320 11, 740 17, 1100 13 C 1420 15, 1680 12, 1750 14" stroke-dasharray="1760" stroke-dashoffset="1760" />
       </svg>
     </div>
 
     <!-- 15 Timed Audio Tracks (Exact Durations: 268s Total) -->
-    <!-- 15 Timed Audio Tracks with Unique IDs (Strictly Required by HyperFrames) -->
-    <audio id="audio-01" preload="auto" src="assets/audio/01_rajendra_prasad.mp3" data-start="0" data-duration="19" data-track-index="0"></audio>
-    <audio id="audio-02" preload="auto" src="assets/audio/02_s_radhakrishnan.mp3" data-start="19" data-duration="17" data-track-index="0"></audio>
-    <audio id="audio-03" preload="auto" src="assets/audio/03_zakir_husain.mp3" data-start="36" data-duration="20" data-track-index="0"></audio>
-    <audio id="audio-04" preload="auto" src="assets/audio/04_vv_giri.mp3" data-start="56" data-duration="18" data-track-index="0"></audio>
-    <audio id="audio-05" preload="auto" src="assets/audio/05_fakhruddin_ali_ahmed.mp3" data-start="74" data-duration="18" data-track-index="0"></audio>
-    <audio id="audio-06" preload="auto" src="assets/audio/06_neelam_sanjiva_reddy.mp3" data-start="92" data-duration="18" data-track-index="0"></audio>
-    <audio id="audio-07" preload="auto" src="assets/audio/07_giani_zail_singh.mp3" data-start="110" data-duration="18" data-track-index="0"></audio>
-    <audio id="audio-08" preload="auto" src="assets/audio/08_r_venkataraman.mp3" data-start="128" data-duration="16" data-track-index="0"></audio>
-    <audio id="audio-09" preload="auto" src="assets/audio/09_shankar_dayal_sharma.mp3" data-start="144" data-duration="17" data-track-index="0"></audio>
-    <audio id="audio-10" preload="auto" src="assets/audio/10_kr_narayanan.mp3" data-start="161" data-duration="17" data-track-index="0"></audio>
-    <audio id="audio-11" preload="auto" src="assets/audio/11_apj_abdul_kalam.mp3" data-start="178" data-duration="17" data-track-index="0"></audio>
-    <audio id="audio-12" preload="auto" src="assets/audio/12_pratibha_patil.mp3" data-start="195" data-duration="18" data-track-index="0"></audio>
-    <audio id="audio-13" preload="auto" src="assets/audio/13_pranab_mukherjee.mp3" data-start="213" data-duration="17" data-track-index="0"></audio>
-    <audio id="audio-14" preload="auto" src="assets/audio/14_ram_nath_kovind.mp3" data-start="230" data-duration="17" data-track-index="0"></audio>
-    <audio id="audio-15" preload="auto" src="assets/audio/15_droupadi_murmu.mp3" data-start="247" data-duration="21" data-track-index="0"></audio>
+    <audio data-hf-id="hf-vxkc" preload="auto" src="assets/audio/01_rajendra_prasad.mp3" data-start="0" data-duration="19" data-track-index="0"></audio>
+    <audio data-hf-id="hf-2g6w" preload="auto" src="assets/audio/02_s_radhakrishnan.mp3" data-start="19" data-duration="17" data-track-index="0"></audio>
+    <audio data-hf-id="hf-fm2u" preload="auto" src="assets/audio/03_zakir_husain.mp3" data-start="36" data-duration="20" data-track-index="0"></audio>
+    <audio data-hf-id="hf-9kpc" preload="auto" src="assets/audio/04_vv_giri.mp3" data-start="56" data-duration="18" data-track-index="0"></audio>
+    <audio data-hf-id="hf-pmp8" preload="auto" src="assets/audio/05_fakhruddin_ali_ahmed.mp3" data-start="74" data-duration="18" data-track-index="0"></audio>
+    <audio data-hf-id="hf-7ddu" preload="auto" src="assets/audio/06_neelam_sanjiva_reddy.mp3" data-start="92" data-duration="18" data-track-index="0"></audio>
+    <audio data-hf-id="hf-fk71" preload="auto" src="assets/audio/07_giani_zail_singh.mp3" data-start="110" data-duration="18" data-track-index="0"></audio>
+    <audio data-hf-id="hf-qchw" preload="auto" src="assets/audio/08_r_venkataraman.mp3" data-start="128" data-duration="16" data-track-index="0"></audio>
+    <audio data-hf-id="hf-ibs1" preload="auto" src="assets/audio/09_shankar_dayal_sharma.mp3" data-start="144" data-duration="17" data-track-index="0"></audio>
+    <audio data-hf-id="hf-9mku" preload="auto" src="assets/audio/10_kr_narayanan.mp3" data-start="161" data-duration="17" data-track-index="0"></audio>
+    <audio data-hf-id="hf-eew1" preload="auto" src="assets/audio/11_apj_abdul_kalam.mp3" data-start="178" data-duration="17" data-track-index="0"></audio>
+    <audio data-hf-id="hf-jcrj" preload="auto" src="assets/audio/12_pratibha_patil.mp3" data-start="195" data-duration="18" data-track-index="0"></audio>
+    <audio data-hf-id="hf-dtmc" preload="auto" src="assets/audio/13_pranab_mukherjee.mp3" data-start="213" data-duration="17" data-track-index="0"></audio>
+    <audio data-hf-id="hf-qrme" preload="auto" src="assets/audio/14_ram_nath_kovind.mp3" data-start="230" data-duration="17" data-track-index="0"></audio>
+    <audio data-hf-id="hf-5lpd" preload="auto" src="assets/audio/15_droupadi_murmu.mp3" data-start="247" data-duration="21" data-track-index="0"></audio>
   </div>
 
   <script>
-    // 15 Presidents Master Motion Graphics Dataset
-    // CHRONOLOGY RULE: Event 1 (e1) is ALWAYS the first fact spoken in audio (~3s).
-    // Event 2 (e2) is ALWAYS the second fact spoken in audio (just before 10s mark ~8.8s to 9.2s).
-    // SPATIAL RULE: In Odd Scenes (1,3,5...) e1 is on LEFT, e2 is on RIGHT.
-    // In Even Scenes (2,4,6...) e1 is on RIGHT, e2 is on LEFT!
-    // SCALE RULE: The first element has +20% bigger size, the second has -20% compact size (alternated).
+    // Generate 36 Glowing Burning Embers in the Background
+    const embersLayer = document.getElementById('ambient-embers-layer');
+    for (let e = 0; e < 36; e++) {
+      const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      c.setAttribute("cx", (e * 57) % 1920);
+      c.setAttribute("cy", 180 + ((e * 89) % 880));
+      c.setAttribute("r", 2.5 + (e % 4) * 1.8);
+      c.setAttribute("fill", "url(#emberDot)");
+      c.setAttribute("class", "ambient-ember");
+      c.style.opacity = (0.25 + (e % 5) * 0.14).toFixed(2);
+      embersLayer.appendChild(c);
+    }
+
+    // ============================================================================
+    // 15 PRESIDENTS FREESTANDING NARRATIVE SVG DATASET
+    // Every SVG has sequential `.svg-part` elements for one-by-one delayed reveal
+    // AND live action classes (`.act-flame-1`, `.act-spin`, `.act-pulse`, etc.)
+    // ============================================================================
     const PRESIDENTS = [
       {
         id: "01_rajendra_prasad",
@@ -531,45 +602,71 @@
         year: "1950",
         term: "1950 – 1962",
         duration: 19,
-        x: 0,
-        y: 0,
+        x: 0, y: 0,
+        moodBg: "radial-gradient(circle at 50% 45%, rgba(72, 32, 14, 0.85) 0%, rgba(14, 8, 12, 0.95) 58%, #030407 100%)",
+        flareTime: 9.0,
         img: "assets/images/01_rajendra_prasad.png",
         fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Rajendra_Prasad_1952.jpg/440px-Rajendra_Prasad_1952.jpg",
         bgImg: "assets/images/01_rajendra_prasad_bg.png",
         bgMeta: { title: "Rashtrapati Bhavan Colonnade", bottom: "35px", w: "480px", h: "410px", opacity: 0.88 },
-        // e1 (First in VO): Refused Salary -> Placed LEFT (+20% Bigger)
         e1: {
-          side: "left",
-          pos: "left: -440px; top: 40px; width: 420px;",
-          rot: -3.5,
-          theme: "headline-gold",
-          fontSize: "46px",
-          iconSize: "96px",
+          pos: "left: -465px; top: 20px; width: 430px;",
+          rot: -2.8, theme: "headline-gold", fontSize: "42px", svgH: "190px",
           title: "REFUSED 75% SALARY",
-          sub: "Accepted Only ₹2,500 of ₹10,000",
+          sub: "Accepted Only ₹2,500 of ₹10,000 Stipend",
           time: 3.0,
-          svg: `<circle cx="48" cy="48" r="38" class="drawn-stroke"/><path d="M30 30l36 36M66 30L30 66" stroke="#ff3b47" stroke-width="5" class="drawn-stroke"/>`
+          svg: `
+            <rect x="16" y="26" width="132" height="78" rx="10" class="svg-part svg-fill-gold"/>
+            <circle cx="82" cy="65" r="24" class="svg-part"/>
+            <text x="82" y="72" text-anchor="middle" fill="#ffbe3b" font-family="Cinzel" font-size="18" font-weight="900" class="svg-part">₹10K</text>
+            <path d="M12 100 L152 28" class="svg-part svg-crimson" stroke-width="5"/>
+            <path d="M12 28 L152 100" class="svg-part svg-crimson" stroke-width="5"/>
+            <path d="M180 142 L262 142 M194 142 L194 68 L248 68 L248 142" class="svg-part"/>
+            <path d="M184 68 L221 36 L258 68 Z" class="svg-part svg-fill-gold"/>
+            <circle cx="221" cy="104" r="22" class="svg-part svg-cyan act-pulse"/>
+            <text x="221" y="109" text-anchor="middle" fill="#00f2fe" font-family="Outfit" font-size="13" font-weight="900" class="svg-part">₹2,500</text>
+          `
         },
-        // e2 (Second in VO): Parade before pyre -> Placed RIGHT (-20% Compact, at ~9.0s)
         e2: {
-          side: "right",
-          pos: "right: -420px; top: 80px; width: 340px;",
-          rot: 3.0,
-          theme: "headline-crimson",
-          fontSize: "32px",
-          iconSize: "68px",
-          title: "PARADE OVER GRIEF",
-          sub: "Led Parade Before Sister's Pyre",
+          pos: "right: -460px; top: 40px; width: 425px;",
+          rot: 2.5, theme: "headline-crimson", fontSize: "35px", svgH: "205px",
+          title: "PARADE OVER SISTER'S PYRE",
+          sub: "26 Jan 1960 • Led Republic Parade Before Cremation",
           time: 9.0,
-          svg: `<path d="M34 12c-9 12-16 20-7 32 5 7 16 5 16-5 0-12-9-16-9-27z" stroke="#ff3b47" stroke-width="3" fill="rgba(255,59,71,0.25)" class="drawn-stroke"/><path d="M20 50h28" stroke="#ffbe3b" stroke-width="3" class="drawn-stroke"/>`
+          svg: `
+            <!-- Part 1: Brother Silhouette with Gandhi Cap -->
+            <path d="M32 48 L52 40 L62 48 Z" class="svg-part svg-fill-gold"/>
+            <circle cx="47" cy="60" r="11" class="svg-part"/>
+            <path d="M28 122 C28 88, 66 88, 66 122" class="svg-part svg-fill-gold"/>
+            <!-- Part 2: Sister Bhagwati Devi Silhouette with Saree Veil -->
+            <circle cx="88" cy="64" r="10" class="svg-part svg-cyan"/>
+            <path d="M76 54 C90 46, 104 58, 100 84" class="svg-part svg-cyan"/>
+            <path d="M70 122 C70 92, 104 92, 104 122" class="svg-part svg-cyan"/>
+            <!-- Part 3: Sacred Brother-Sister Rakhi Bond -->
+            <path d="M54 98 Q 68 86 82 98" class="svg-part svg-crimson" stroke-width="3.5"/>
+            <circle cx="68" cy="92" r="5" fill="#ffbe3b" class="svg-part act-pulse"/>
+            <!-- Part 4: Stacked Funeral Pyre Logs -->
+            <rect x="146" y="144" width="116" height="11" rx="5" class="svg-part svg-fill-gold"/>
+            <rect x="154" y="131" width="100" height="11" rx="5" class="svg-part svg-fill-gold"/>
+            <path d="M150 150 L258 126 M154 126 L254 150" class="svg-part"/>
+            <!-- Part 5: Live Action Multi-Layer Funeral Pyre Flames & Rising Embers -->
+            <g class="act-flame-1">
+              <path d="M160 126 C152 84, 182 56, 194 18 C206 50, 218 34, 226 14 C238 52, 258 86, 248 126 Z" class="svg-part svg-crimson"/>
+            </g>
+            <g class="act-flame-2">
+              <path d="M174 126 C170 92, 192 66, 206 36 C218 64, 238 90, 234 126 Z" class="svg-part svg-fill-gold"/>
+            </g>
+            <circle cx="186" cy="48" r="3.5" fill="#ffbe3b" class="act-ember-1"/>
+            <circle cx="218" cy="36" r="4" fill="#ff3b47" class="act-ember-2"/>
+            <circle cx="204" cy="24" r="3" fill="#fffdf2" class="act-ember-3"/>
+          `
         },
-        // 3rd Element: Massive Impact Stamp (Last 3.5s)
         stamp: {
-          shapeClass: "stamp-railway",
-          pos: "left: -440px; bottom: 25px;",
-          badge: "📜 CLASSIFIED SECRET",
-          main: "ORDINARY 3RD CLASS TRAIN",
-          time: 15.5
+          pos: "left: -460px; bottom: 18px;",
+          badge: "🚂 RETIREMENT HUMILITY",
+          main: "3RD CLASS TRAIN COMPARTMENT",
+          time: 15.5,
+          svg: `<rect x="6" y="14" width="46" height="26" rx="4" fill="none" stroke="#ffbe3b" stroke-width="2.5"/><circle cx="16" cy="46" r="5" stroke="#ffbe3b" stroke-width="2.5" fill="none"/><circle cx="42" cy="46" r="5" stroke="#ffbe3b" stroke-width="2.5" fill="none"/>`
         }
       },
       {
@@ -578,44 +675,55 @@
         year: "1962",
         term: "1962 – 1967",
         duration: 17,
-        x: 1600,
-        y: -420,
+        x: 1600, y: -420,
+        moodBg: "radial-gradient(circle at 50% 45%, rgba(16, 48, 78, 0.82) 0%, rgba(7, 13, 24, 0.95) 58%, #020408 100%)",
+        flareTime: 3.2,
         img: "assets/images/02_s_radhakrishnan.png",
         fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Sarvepalli_Radhakrishnan_1962.jpg/440px-Sarvepalli_Radhakrishnan_1962.jpg",
         bgImg: "assets/images/02_s_radhakrishnan_bg.png",
         bgMeta: { title: "Oxford Library & Scrolls", bottom: "40px", w: "470px", h: "410px", opacity: 0.85 },
-        // e1 (First in VO): Students pulled carriage -> Placed RIGHT (+20% Bigger) [Even Scene Shift!]
         e1: {
-          side: "right",
-          pos: "right: -440px; top: 40px; width: 420px;",
-          rot: 3.5,
-          theme: "headline-cyan",
-          fontSize: "46px",
-          iconSize: "96px",
-          title: "PULLED CARRIAGE THEMSELVES",
-          sub: "Students Unhitched Horses to Station",
+          pos: "right: -465px; top: 20px; width: 430px;",
+          rot: 2.8, theme: "headline-cyan", fontSize: "40px", svgH: "190px",
+          title: "PULLED CARRIAGE BY HAND",
+          sub: "Students Unhitched Horses to Mysore Station",
           time: 3.0,
-          svg: `<rect x="16" y="26" width="56" height="30" rx="4" class="drawn-stroke"/><circle cx="28" cy="66" r="9" class="drawn-stroke"/><circle cx="60" cy="66" r="9" class="drawn-stroke"/><path d="M72 40h16" class="drawn-stroke"/>`
+          svg: `
+            <path d="M26 98 L26 50 C26 30, 128 30, 128 50 L128 98 Z" class="svg-part svg-fill-gold"/>
+            <path d="M18 98 L142 98 L132 118 L28 118 Z" class="svg-part svg-cyan"/>
+            <path d="M30 58 Q 54 74 78 58 Q 102 74 124 58" class="svg-part svg-crimson"/>
+            <g class="act-spin">
+              <circle cx="48" cy="128" r="22" class="svg-part"/>
+              <path d="M48 106v44M26 128h44" class="svg-part"/>
+            </g>
+            <g class="act-spin">
+              <circle cx="114" cy="128" r="22" class="svg-part"/>
+              <path d="M114 106v44M92 128h44" class="svg-part"/>
+            </g>
+            <path d="M138 96 L248 82" class="svg-part" stroke-dasharray="6 4"/>
+            <circle cx="222" cy="58" r="11" class="svg-part svg-cyan"/>
+            <path d="M204 134 L216 90 L236 90 L248 134" class="svg-part svg-cyan"/>
+          `
         },
-        // e2 (Second in VO): Stalin meeting -> Placed LEFT (-20% Compact, at ~9.0s)
         e2: {
-          side: "left",
-          pos: "left: -420px; top: 80px; width: 340px;",
-          rot: -2.8,
-          theme: "headline-gold",
-          fontSize: "32px",
-          iconSize: "68px",
-          title: "STALIN IN PRIVATE",
-          sub: "Kremlin Dictator Broke Protocol",
+          pos: "left: -445px; top: 45px; width: 395px;",
+          rot: -2.5, theme: "headline-gold", fontSize: "34px", svgH: "180px",
+          title: "MELTED JOSEPH STALIN",
+          sub: "Kremlin Dictator Broke Iron Protocol • 1952",
           time: 9.0,
-          svg: `<polygon points="34,10 40,24 54,24 42,32 46,46 34,38 22,46 26,32 14,24 28,24" class="drawn-stroke"/><circle cx="34" cy="28" r="4" stroke="#00f2fe" class="drawn-stroke"/>`
+          svg: `
+            <path d="M44 146 L44 76 L86 76 L86 146 M52 76 L65 32 L78 76" class="svg-part svg-fill-gold"/>
+            <polygon points="65,12 69,22 79,22 71,28 74,38 65,32 56,38 59,28 51,22 61,22" class="svg-part svg-crimson act-pulse"/>
+            <circle cx="192" cy="88" r="44" class="svg-part svg-cyan act-pulse"/>
+            <path d="M156 88 L188 74 L220 90 L192 108 Z" class="svg-part svg-fill-gold"/>
+          `
         },
         stamp: {
-          shapeClass: "stamp-nobel",
-          pos: "right: -440px; bottom: 25px;",
-          badge: "🎖️ HISTORIC RECORD",
-          main: "27X NOBEL NOMINEE",
-          time: 13.5
+          pos: "right: -460px; bottom: 18px;",
+          badge: "🎖️ GLOBAL LAUREATE RECORD",
+          main: "27X NOBEL PRIZE NOMINEE",
+          time: 13.5,
+          svg: `<circle cx="29" cy="29" r="22" stroke="#ffbe3b" stroke-width="2.5" fill="none"/><polygon points="29,12 34,23 46,23 36,30 40,42 29,35 18,42 22,30 12,23 24,23" stroke="#ffbe3b" stroke-width="2" fill="none"/>`
         }
       },
       {
@@ -624,44 +732,51 @@
         year: "1967",
         term: "1967 – 1969",
         duration: 20,
-        x: 3200,
-        y: 400,
+        x: 3200, y: 400,
+        moodBg: "radial-gradient(circle at 50% 45%, rgba(68, 18, 28, 0.85) 0%, rgba(14, 8, 16, 0.95) 58%, #030408 100%)",
+        flareTime: 3.2,
         img: "assets/images/03_zakir_husain.png",
         fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Zakir_Hussain_1967.jpg/440px-Zakir_Hussain_1967.jpg",
         bgImg: "assets/images/03_zakir_husain_bg.png",
         bgMeta: { title: "Jamia Millia Heritage Archways", bottom: "35px", w: "480px", h: "400px", opacity: 0.88 },
-        // e1 (First in VO): Stood down armed mob -> Placed LEFT (+20% Bigger)
         e1: {
-          side: "left",
-          pos: "left: -440px; top: 40px; width: 420px;",
-          rot: -3.5,
-          theme: "headline-crimson",
-          fontSize: "44px",
-          iconSize: "96px",
+          pos: "left: -465px; top: 20px; width: 430px;",
+          rot: -2.8, theme: "headline-crimson", fontSize: "40px", svgH: "190px",
           title: "FACED DOWN ARMED MOB",
-          sub: "Unarmed in Partition Violence",
+          sub: "Stood Unarmed in 1947 Partition Riot",
           time: 3.2,
-          svg: `<path d="M48 16l26 11v20c0 17-26 29-26 29S22 64 22 47V27z" class="drawn-stroke"/><path d="M35 44l9 9 18-18" stroke="#00f2fe" class="drawn-stroke"/>`
+          svg: `
+            <path d="M28 144 L28 96 M56 144 L56 88 M84 144 L84 98" class="svg-part svg-crimson" stroke-width="6"/>
+            <path d="M44 50 C38 32, 50 20, 56 36 C62 22, 68 38, 44 50 Z" class="svg-part svg-crimson act-flame-1"/>
+            <path d="M76 44 C70 26, 82 14, 88 30 C94 18, 98 34, 76 44 Z" class="svg-part svg-fill-gold act-flame-2"/>
+            <path d="M138 22 Q 110 88 138 154" class="svg-part svg-cyan act-pulse" stroke-width="4.5"/>
+            <circle cx="206" cy="56" r="14" class="svg-part svg-fill-gold"/>
+            <path d="M180 146 C180 94, 232 94, 232 146 Z" class="svg-part svg-fill-gold"/>
+          `
         },
-        // e2 (Second in VO): 500 Roses -> Placed RIGHT (-20% Compact, at ~9.2s)
         e2: {
-          side: "right",
-          pos: "right: -420px; top: 80px; width: 340px;",
-          rot: 3.0,
-          theme: "headline-gold",
-          fontSize: "32px",
-          iconSize: "68px",
+          pos: "right: -445px; top: 45px; width: 395px;",
+          rot: 2.5, theme: "headline-gold", fontSize: "34px", svgH: "180px",
           title: "500 BOTANICAL ROSES",
-          sub: "Curated Presidential Marvel",
+          sub: "Curated Mughal Gardens Sanctuary",
           time: 9.2,
-          svg: `<circle cx="34" cy="24" r="13" class="drawn-stroke"/><path d="M34 37v18M27 43l7-6 7 6" stroke="#ff3b47" class="drawn-stroke"/>`
+          svg: `
+            <path d="M44 152 L44 68 C44 36, 140 16, 140 16 C140 16, 236 36, 236 68 L236 152" class="svg-part" stroke-dasharray="6 4"/>
+            <g class="act-pulse">
+              <circle cx="140" cy="84" r="42" class="svg-part svg-crimson"/>
+              <path d="M140 42 C166 56, 166 112, 140 126 C114 112, 114 56, 140 42 Z" class="svg-part svg-crimson"/>
+              <path d="M98 84 C112 58, 168 58, 182 84 C168 110, 112 110, 98 84 Z" class="svg-part svg-crimson"/>
+            </g>
+            <circle cx="140" cy="84" r="14" class="svg-part svg-fill-gold"/>
+            <path d="M140 126 L140 158 M140 142 L112 128 M140 138 L168 124" class="svg-part svg-cyan"/>
+          `
         },
         stamp: {
-          shapeClass: "stamp-coin",
-          pos: "left: -440px; bottom: 25px;",
+          pos: "left: -460px; bottom: 18px;",
           badge: "🪙 ANCIENT NUMISMATIST",
           main: "DELHI SULTANATE COINS",
-          time: 16.5
+          time: 16.5,
+          svg: `<circle cx="29" cy="29" r="22" stroke="#c084fc" stroke-width="2.5" fill="none"/><rect x="18" y="18" width="22" height="22" stroke="#ffbe3b" stroke-width="2" fill="none" transform="rotate(45 29 29)"/>`
         }
       },
       {
@@ -670,44 +785,47 @@
         year: "1969",
         term: "1969 – 1974",
         duration: 18,
-        x: 4800,
-        y: -360,
+        x: 4800, y: -360,
+        moodBg: "radial-gradient(circle at 50% 45%, rgba(58, 38, 12, 0.84) 0%, rgba(12, 10, 18, 0.95) 58%, #030408 100%)",
+        flareTime: 3.0,
         img: "assets/images/04_vv_giri.png",
         fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Varahagiri_Venkata_Giri_1969.jpg/440px-Varahagiri_Venkata_Giri_1969.jpg",
         bgImg: "assets/images/04_vv_giri_bg.png",
         bgMeta: { title: "Industrial Gears & Locomotive Platform", bottom: "30px", w: "490px", h: "410px", opacity: 0.85 },
-        // e1 (First in VO): Rebel underdog took on syndicate -> Placed RIGHT (+20% Bigger)
         e1: {
-          side: "right",
-          pos: "right: -440px; top: 40px; width: 420px;",
-          rot: 3.5,
-          theme: "headline-gold",
-          fontSize: "46px",
-          iconSize: "96px",
-          title: "REBEL UNDERDOG",
-          sub: "Took on the Party Syndicate",
+          pos: "right: -465px; top: 20px; width: 430px;",
+          rot: 2.8, theme: "headline-gold", fontSize: "40px", svgH: "190px",
+          title: "SHATTERED THE SYNDICATE",
+          sub: "First Independent Rebel to Win Raisina",
           time: 3.0,
-          svg: `<circle cx="32" cy="46" r="13" class="drawn-stroke"/><circle cx="62" cy="46" r="13" class="drawn-stroke"/><path d="M42 34l10 24M52 34l-10 24" stroke="#ff3b47" stroke-width="4.5" class="drawn-stroke"/>`
+          svg: `
+            <rect x="20" y="68" width="70" height="36" rx="18" class="svg-part svg-fill-gold" stroke-width="4"/>
+            <rect x="190" y="68" width="70" height="36" rx="18" class="svg-part svg-fill-gold" stroke-width="4"/>
+            <path d="M102 66 L128 48 L118 82 M178 66 L152 48 L162 82" class="svg-part svg-crimson" stroke-width="4"/>
+            <polygon points="140,20 128,66 148,68 132,118 162,62 142,60" class="svg-part svg-crimson act-pulse"/>
+          `
         },
-        // e2 (Second in VO): Conscience vote 1969 -> Placed LEFT (-20% Compact, at ~9.0s)
         e2: {
-          side: "left",
-          pos: "left: -420px; top: 80px; width: 340px;",
-          rot: -2.8,
-          theme: "headline-cyan",
-          fontSize: "32px",
-          iconSize: "68px",
+          pos: "left: -445px; top: 45px; width: 395px;",
+          rot: -2.5, theme: "headline-cyan", fontSize: "34px", svgH: "180px",
           title: "CONSCIENCE VOTE 1969",
-          sub: "Wildest Democratic Upset",
+          sub: "Historic 2nd Preference Ballot Triumph",
           time: 9.0,
-          svg: `<rect x="20" y="24" width="34" height="32" rx="4" class="drawn-stroke"/><path d="M26 24v-10h16v10" class="drawn-stroke"/><path d="M24 38l7 7 14-14" stroke="#00f2fe" class="drawn-stroke"/>`
+          svg: `
+            <rect x="86" y="68" width="108" height="80" rx="8" class="svg-part svg-fill-gold"/>
+            <g class="act-float">
+              <rect x="114" y="18" width="52" height="38" rx="4" class="svg-part svg-cyan"/>
+              <path d="M126 38 L136 48 L154 28" class="svg-part" stroke-width="3.5"/>
+            </g>
+            <text x="140" y="118" text-anchor="middle" fill="#ffbe3b" font-family="Outfit" font-size="18" font-weight="900" class="svg-part">50.2% WIN</text>
+          `
         },
         stamp: {
-          shapeClass: "stamp-warrant",
-          pos: "right: -440px; bottom: 25px;",
-          badge: "🇮🇪 1916 EASTER RISING",
-          main: "EXPELLED FROM IRELAND",
-          time: 14.5
+          pos: "right: -460px; bottom: 18px;",
+          badge: "🇮🇪 1916 DUBLIN REBELLION",
+          main: "DEPORTED FROM IRELAND",
+          time: 14.5,
+          svg: `<rect x="12" y="12" width="34" height="34" stroke="#ff3b47" stroke-width="2.5" fill="none"/><path d="M18 29 L40 29 M29 18 L29 40" stroke="#ffbe3b" stroke-width="3"/>`
         }
       },
       {
@@ -716,44 +834,47 @@
         year: "1974",
         term: "1974 – 1977",
         duration: 18,
-        x: 6400,
-        y: 420,
+        x: 6400, y: 420,
+        moodBg: "radial-gradient(circle at 50% 45%, rgba(62, 14, 24, 0.86) 0%, rgba(8, 8, 18, 0.96) 58%, #020306 100%)",
+        flareTime: 9.0,
         img: "assets/images/05_fakhruddin_ali_ahmed.png",
         fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Fakhruddin_Ali_Ahmed_1974.jpg/440px-Fakhruddin_Ali_Ahmed_1974.jpg",
         bgImg: "assets/images/05_fakhruddin_ali_ahmed_bg.png",
         bgMeta: { title: "Supreme Court Portico & Steps", bottom: "35px", w: "480px", h: "400px", opacity: 0.85 },
-        // e1 (First in VO): Tennis ace & Cambridge barrister -> Placed LEFT (+20% Bigger)
         e1: {
-          side: "left",
-          pos: "left: -440px; top: 40px; width: 420px;",
-          rot: -3.5,
-          theme: "headline-gold",
-          fontSize: "44px",
-          iconSize: "96px",
-          title: "CAMBRIDGE BARRISTER",
-          sub: "Inner Temple Scholar & Tennis Ace",
+          pos: "left: -465px; top: 20px; width: 430px;",
+          rot: -2.8, theme: "headline-gold", fontSize: "40px", svgH: "190px",
+          title: "CAMBRIDGE & TENNIS ACE",
+          sub: "Inner Temple Barrister & Golf Champion",
           time: 3.2,
-          svg: `<ellipse cx="48" cy="32" rx="22" ry="24" class="drawn-stroke"/><path d="M48 56v26M38 82h20M34 22l28 20" class="drawn-stroke"/>`
+          svg: `
+            <ellipse cx="95" cy="58" rx="32" ry="40" transform="rotate(-28 95 58)" class="svg-part svg-fill-gold"/>
+            <line x1="114" y1="92" x2="152" y2="148" class="svg-part" stroke-width="5"/>
+            <ellipse cx="185" cy="58" rx="32" ry="40" transform="rotate(28 185 58)" class="svg-part svg-cyan"/>
+            <line x1="166" y1="92" x2="128" y2="148" class="svg-part svg-cyan" stroke-width="5"/>
+            <circle cx="140" cy="118" r="15" class="svg-part svg-fill-gold act-float"/>
+          `
         },
-        // e2 (Second in VO): Midnight emergency -> Placed RIGHT (-20% Compact, at ~9.0s)
         e2: {
-          side: "right",
-          pos: "right: -420px; top: 80px; width: 340px;",
-          rot: 3.0,
-          theme: "headline-crimson",
-          fontSize: "32px",
-          iconSize: "68px",
-          title: "MIDNIGHT 12:00 DECREE",
-          sub: "Constitutional Crisis Storm",
+          pos: "right: -445px; top: 45px; width: 405px;",
+          rot: 2.5, theme: "headline-crimson", fontSize: "34px", svgH: "185px",
+          title: "MIDNIGHT 11:45 PM DECREE",
+          sub: "25 June 1975 • Emergency Proclamation Signed",
           time: 9.0,
-          svg: `<circle cx="34" cy="34" r="23" class="drawn-stroke"/><path d="M34 16v18l10-6" stroke-width="3" class="drawn-stroke"/><circle cx="34" cy="34" r="2.5" fill="#ffbe3b"/>`
+          svg: `
+            <circle cx="96" cy="86" r="54" class="svg-part svg-crimson act-pulse"/>
+            <line x1="96" y1="86" x2="96" y2="42" class="svg-part" stroke-width="4"/>
+            <line x1="96" y1="86" x2="80" y2="50" class="svg-part svg-crimson" stroke-width="3.5"/>
+            <rect x="166" y="54" width="90" height="82" rx="6" class="svg-part svg-fill-gold"/>
+            <path d="M182 82 h58 M182 102 h42" class="svg-part svg-crimson"/>
+          `
         },
         stamp: {
-          shapeClass: "stamp-tennis",
-          pos: "left: -440px; bottom: 25px;",
-          badge: "🎾 DAVIS CUP LEADER",
-          main: "ALL INDIA TENNIS CHIEF",
-          time: 14.5
+          pos: "left: -460px; bottom: 18px;",
+          badge: "🎾 SPORTS FEDERATION HEAD",
+          main: "ALL INDIA TENNIS PRESIDENT",
+          time: 14.5,
+          svg: `<circle cx="29" cy="29" r="20" stroke="#10b981" stroke-width="2.5" fill="none"/><path d="M15 15 C28 25, 28 33, 15 43 M43 15 C30 25, 30 33, 43 43" stroke="#ffbe3b" stroke-width="2" fill="none"/>`
         }
       },
       {
@@ -762,44 +883,43 @@
         year: "1977",
         term: "1977 – 1982",
         duration: 18,
-        x: 8000,
-        y: -310,
+        x: 8000, y: -310,
+        moodBg: "radial-gradient(circle at 50% 45%, rgba(22, 52, 32, 0.82) 0%, rgba(7, 14, 12, 0.95) 58%, #020406 100%)",
+        flareTime: 3.0,
         img: "assets/images/06_neelam_sanjiva_reddy.png",
         fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Neelam_Sanjiva_Reddy_1977.jpg/440px-Neelam_Sanjiva_Reddy_1977.jpg",
         bgImg: "assets/images/06_neelam_sanjiva_reddy_bg.png",
         bgMeta: { title: "Wheat Harvest & Parliament Colonnade", bottom: "30px", w: "500px", h: "420px", opacity: 0.88 },
-        // e1 (First in VO): Walked away to plow fields -> Placed RIGHT (+20% Bigger)
         e1: {
-          side: "right",
-          pos: "right: -440px; top: 40px; width: 420px;",
-          rot: 3.5,
-          theme: "headline-gold",
-          fontSize: "46px",
-          iconSize: "96px",
-          title: "PLOWED VILLAGE FIELDS",
-          sub: "Walked Away to Farming Soil",
+          pos: "right: -465px; top: 20px; width: 430px;",
+          rot: 2.8, theme: "headline-gold", fontSize: "40px", svgH: "190px",
+          title: "RETURNED TO PLOW FIELDS",
+          sub: "Walked Away to Anantapur Farming Soil",
           time: 3.0,
-          svg: `<path d="M16 66h60M22 54l24 12 30-36M32 36l14 20" class="drawn-stroke"/>`
+          svg: `
+            <circle cx="140" cy="92" r="46" class="svg-part svg-fill-gold act-pulse"/>
+            <path d="M56 54 L132 124 L212 124 L176 96" class="svg-part svg-fill-gold" stroke-width="3.5"/>
+            <path d="M22 140 Q 82 124 140 140 T 258 140" class="svg-part svg-cyan" stroke-width="3"/>
+          `
         },
-        // e2 (Second in VO): 100% unopposed win -> Placed LEFT (-20% Compact, at ~9.2s)
         e2: {
-          side: "left",
-          pos: "left: -420px; top: 80px; width: 340px;",
-          rot: -2.8,
-          theme: "headline-cyan",
-          fontSize: "32px",
-          iconSize: "68px",
-          title: "100% UNOPPOSED WIN",
-          sub: "All Political Parties United",
+          pos: "left: -445px; top: 45px; width: 395px;",
+          rot: -2.5, theme: "headline-cyan", fontSize: "34px", svgH: "180px",
+          title: "100% UNOPPOSED VICTORY",
+          sub: "Only President Elected Unanimously",
           time: 9.2,
-          svg: `<circle cx="34" cy="34" r="23" class="drawn-stroke"/><path d="M22 34l8 8 14-14" stroke="#00f2fe" stroke-width="4" class="drawn-stroke"/>`
+          svg: `
+            <circle cx="140" cy="84" r="52" class="svg-part svg-cyan act-pulse"/>
+            <circle cx="140" cy="84" r="38" class="svg-part" stroke-dasharray="6 4"/>
+            <path d="M114 84 L134 104 L170 64" class="svg-part svg-cyan" stroke-width="5"/>
+          `
         },
         stamp: {
-          shapeClass: "stamp-eco",
-          pos: "right: -440px; bottom: 25px;",
-          badge: "🌾 SURRENDERED PALACE",
-          main: "GAVE UP 70% OF PALACE",
-          time: 14.5
+          pos: "right: -460px; bottom: 18px;",
+          badge: "🌾 AUSTERITY PLEDGE",
+          main: "GAVE UP 70% OF SALARY",
+          time: 14.5,
+          svg: `<path d="M29 10 C15 22, 15 40, 29 48 C43 40, 43 22, 29 10 Z" stroke="#34d399" stroke-width="2.5" fill="none"/>`
         }
       },
       {
@@ -808,44 +928,43 @@
         year: "1982",
         term: "1982 – 1987",
         duration: 18,
-        x: 9600,
-        y: 350,
+        x: 9600, y: 350,
+        moodBg: "radial-gradient(circle at 50% 45%, rgba(62, 28, 16, 0.84) 0%, rgba(12, 9, 18, 0.95) 58%, #030408 100%)",
+        flareTime: 9.0,
         img: "assets/images/07_giani_zail_singh.png",
         fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Giani_Zail_Singh_1982.jpg/440px-Giani_Zail_Singh_1982.jpg",
         bgImg: "assets/images/07_giani_zail_singh_bg.png",
         bgMeta: { title: "Sandstone Jharokha & Red Carpet", bottom: "35px", w: "480px", h: "410px", opacity: 0.85 },
-        // e1 (First in VO): Secret mail interception bill -> Placed LEFT (+20% Bigger)
         e1: {
-          side: "left",
-          pos: "left: -440px; top: 40px; width: 420px;",
-          rot: -3.5,
-          theme: "headline-crimson",
-          fontSize: "44px",
-          iconSize: "96px",
-          title: "BLOCKED POSTAL LAW",
-          sub: "Saved Citizen Mail Privacy",
+          pos: "left: -465px; top: 20px; width: 430px;",
+          rot: -2.8, theme: "headline-crimson", fontSize: "40px", svgH: "190px",
+          title: "BLOCKED SNOOPING BILL",
+          sub: "Protected Citizen Letters from Censorship",
           time: 3.2,
-          svg: `<rect x="16" y="28" width="58" height="38" rx="3" class="drawn-stroke"/><path d="M16 30l29 22 29-22" class="drawn-stroke"/>`
+          svg: `
+            <rect x="56" y="46" width="168" height="98" rx="10" class="svg-part svg-fill-gold"/>
+            <path d="M56 50 L140 106 L224 50" class="svg-part"/>
+            <circle cx="140" cy="102" r="20" class="svg-part svg-crimson act-pulse"/>
+          `
         },
-        // e2 (Second in VO): Pocket veto in desk drawer -> Placed RIGHT (-20% Compact, at ~9.0s)
         e2: {
-          side: "right",
-          pos: "right: -420px; top: 80px; width: 340px;",
-          rot: 3.0,
-          theme: "headline-gold",
-          fontSize: "32px",
-          iconSize: "68px",
+          pos: "right: -445px; top: 45px; width: 395px;",
+          rot: 2.5, theme: "headline-gold", fontSize: "34px", svgH: "180px",
           title: "THE POCKET VETO",
-          sub: "Slipped Bill into Desk Drawer",
+          sub: "Locked Bill Inside Presidential Drawer",
           time: 9.0,
-          svg: `<rect x="14" y="24" width="40" height="24" rx="4" class="drawn-stroke"/><circle cx="34" cy="36" r="3.5" class="drawn-stroke"/><path d="M26 24v-7a8 8 0 0 1 16 0v7" class="drawn-stroke"/>`
+          svg: `
+            <rect x="44" y="46" width="192" height="84" rx="8" class="svg-part svg-fill-gold"/>
+            <rect x="116" y="74" width="48" height="38" rx="6" class="svg-part svg-cyan act-float"/>
+            <path d="M128 74 V58 A12 12 0 0 1 152 58 V74" class="svg-part" stroke-width="3.5"/>
+          `
         },
         stamp: {
-          shapeClass: "stamp-milestone",
-          pos: "left: -440px; bottom: 25px;",
+          pos: "left: -460px; bottom: 18px;",
           badge: "🛣️ GURU GOBIND SINGH MARG",
-          main: "BUILT 640 KM HIGHWAY",
-          time: 14.5
+          main: "BUILT 640 KM HERITAGE ROAD",
+          time: 14.5,
+          svg: `<path d="M14 48 L24 12 L34 12 L44 48 Z" stroke="#ffbe3b" stroke-width="2.5" fill="none"/>`
         }
       },
       {
@@ -854,44 +973,46 @@
         year: "1987",
         term: "1987 – 1992",
         duration: 16,
-        x: 11200,
-        y: -390,
+        x: 11200, y: -390,
+        moodBg: "radial-gradient(circle at 50% 45%, rgba(16, 42, 68, 0.82) 0%, rgba(7, 11, 22, 0.95) 58%, #020408 100%)",
+        flareTime: 8.8,
         img: "assets/images/08_r_venkataraman.png",
         fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Ramaswamy_Venkataraman_1987.jpg/440px-Ramaswamy_Venkataraman_1987.jpg",
         bgImg: "assets/images/08_r_venkataraman_bg.png",
         bgMeta: { title: "Brass Clockwork & Plan Schematics", bottom: "35px", w: "480px", h: "400px", opacity: 0.85 },
-        // e1 (First in VO): 4 PMs in 4 years -> Placed RIGHT (+20% Bigger)
         e1: {
-          side: "right",
-          pos: "right: -440px; top: 40px; width: 420px;",
-          rot: 3.5,
-          theme: "headline-cyan",
-          fontSize: "46px",
-          iconSize: "96px",
+          pos: "right: -465px; top: 20px; width: 430px;",
+          rot: 2.8, theme: "headline-cyan", fontSize: "40px", svgH: "190px",
           title: "4 PRIME MINISTERS",
-          sub: "Sworn In Across 4 Coalition Years",
+          sub: "Guided India Through Coalition Era",
           time: 2.8,
-          svg: `<circle cx="26" cy="30" r="9" class="drawn-stroke"/><circle cx="48" cy="26" r="9" class="drawn-stroke"/><circle cx="70" cy="30" r="9" class="drawn-stroke"/><circle cx="48" cy="64" r="9" class="drawn-stroke"/>`
+          svg: `
+            <path d="M36 56 L140 18 L244 56 Z" class="svg-part svg-fill-gold"/>
+            <rect x="52" y="56" width="22" height="82" class="svg-part svg-cyan"/>
+            <rect x="102" y="56" width="22" height="82" class="svg-part svg-cyan"/>
+            <rect x="154" y="56" width="22" height="82" class="svg-part svg-cyan"/>
+            <rect x="204" y="56" width="22" height="82" class="svg-part svg-cyan"/>
+            <rect x="32" y="138" width="216" height="14" rx="4" class="svg-part svg-fill-gold"/>
+          `
         },
-        // e2 (Second in VO): Emergency lamp -> Placed LEFT (-20% Compact, at ~8.8s)
         e2: {
-          side: "left",
-          pos: "left: -420px; top: 80px; width: 340px;",
-          rot: -2.8,
-          theme: "headline-gold",
-          fontSize: "32px",
-          iconSize: "68px",
+          pos: "left: -445px; top: 45px; width: 395px;",
+          rot: -2.5, theme: "headline-gold", fontSize: "34px", svgH: "180px",
           title: "THE EMERGENCY LAMP",
-          sub: "Glows Decisively When Power Fails",
+          sub: "Shines Automatically When Power Fails",
           time: 8.8,
-          svg: `<path d="M34 13c-9 0-14 7-14 14 0 7 6 10 7 14h14c2-4 7-7 7-14 0-7-5-14-14-14z" class="drawn-stroke"/><path d="M24 41v5h20v-5" class="drawn-stroke"/>`
+          svg: `
+            <circle cx="140" cy="84" r="54" class="svg-part svg-fill-gold act-pulse"/>
+            <rect x="112" y="42" width="56" height="76" rx="14" class="svg-part svg-cyan"/>
+            <path d="M140 98 C130 82, 134 66, 140 54 C146 66, 150 82, 140 98 Z" class="svg-part svg-crimson act-flame-1"/>
+          `
         },
         stamp: {
-          shapeClass: "stamp-treasury",
-          pos: "right: -440px; bottom: 25px;",
-          badge: "💰 TREASURY REFUND",
-          main: "SURRENDERED PENSION",
-          time: 12.5
+          pos: "right: -460px; bottom: 18px;",
+          badge: "💰 FREEDOM FIGHTER SACRIFICE",
+          main: "REFUSED PENSION FOR LIFE",
+          time: 12.5,
+          svg: `<circle cx="29" cy="29" r="21" stroke="#ffbe3b" stroke-width="2.5" fill="none"/><path d="M20 29 L27 36 L40 22" stroke="#ffbe3b" stroke-width="3" fill="none"/>`
         }
       },
       {
@@ -900,44 +1021,46 @@
         year: "1992",
         term: "1992 – 1997",
         duration: 17,
-        x: 12800,
-        y: 360,
+        x: 12800, y: 360,
+        moodBg: "radial-gradient(circle at 50% 45%, rgba(20, 38, 65, 0.82) 0%, rgba(8, 10, 20, 0.95) 58%, #020307 100%)",
+        flareTime: 9.0,
         img: "assets/images/09_shankar_dayal_sharma.png",
         fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Shankar_Dayal_Sharma_1992.jpg/440px-Shankar_Dayal_Sharma_1992.jpg",
         bgImg: "assets/images/09_shankar_dayal_sharma_bg.png",
         bgMeta: { title: "Vedic Pavilion & Sanskrit Dais", bottom: "35px", w: "480px", h: "410px", opacity: 0.85 },
-        // e1 (First in VO): Wept in Parliament for decorum -> Placed LEFT (+20% Bigger)
         e1: {
-          side: "left",
-          pos: "left: -440px; top: 40px; width: 420px;",
-          rot: -3.5,
-          theme: "headline-cyan",
-          fontSize: "44px",
-          iconSize: "96px",
-          title: "TEARS IN PARLIAMENT",
-          sub: "Wept to Defend House Decorum",
+          pos: "left: -465px; top: 20px; width: 430px;",
+          rot: -2.8, theme: "headline-cyan", fontSize: "40px", svgH: "190px",
+          title: "WEPT FOR HOUSE DECORUM",
+          sub: "Tears in Rajya Sabha Restored Silence",
           time: 3.0,
-          svg: `<rect x="22" y="32" width="48" height="17" rx="3" class="drawn-stroke"/><path d="M46 49v26M36 75h20" class="drawn-stroke"/>`
+          svg: `
+            <path d="M140 24 C122 56, 114 76, 114 92 A26 26 0 0 0 166 92 C166 76, 158 56, 140 24 Z" class="svg-part svg-cyan act-float"/>
+            <ellipse cx="140" cy="138" rx="64" ry="14" class="svg-part"/>
+            <ellipse cx="140" cy="138" rx="96" ry="22" class="svg-part svg-cyan act-pulse"/>
+          `
         },
-        // e2 (Second in VO): Sultan of Oman drove his car -> Placed RIGHT (-20% Compact, at ~9.0s)
         e2: {
-          side: "right",
-          pos: "right: -420px; top: 80px; width: 340px;",
-          rot: 3.0,
-          theme: "headline-gold",
-          fontSize: "32px",
-          iconSize: "68px",
+          pos: "right: -445px; top: 45px; width: 395px;",
+          rot: 2.5, theme: "headline-gold", fontSize: "34px", svgH: "180px",
           title: "SULTAN DROVE HIS CAR",
-          sub: "Oman Monarch Broke Protocol",
+          sub: "King of Oman Chauffeur-Drove His Teacher",
           time: 9.0,
-          svg: `<circle cx="34" cy="34" r="23" class="drawn-stroke"/><circle cx="34" cy="34" r="7" class="drawn-stroke"/><path d="M34 11v16M34 41v16M11 34h16M41 34h16" class="drawn-stroke"/>`
+          svg: `
+            <g class="act-spin">
+              <circle cx="140" cy="92" r="46" class="svg-part svg-fill-gold" stroke-width="4"/>
+              <circle cx="140" cy="92" r="14" class="svg-part svg-cyan"/>
+              <path d="M140 46v32M96 108l32-12M184 108l-32-12" class="svg-part" stroke-width="4"/>
+            </g>
+            <path d="M112 32 L122 14 L140 24 L158 14 L168 32 Z" class="svg-part svg-crimson"/>
+          `
         },
         stamp: {
-          shapeClass: "stamp-cambridge",
-          pos: "left: -440px; bottom: 25px;",
-          badge: "🎓 CAMBRIDGE LAW FELLOW",
-          main: "HARVARD & CAMBRIDGE SCHOLAR",
-          time: 13.5
+          pos: "left: -460px; bottom: 18px;",
+          badge: "🎓 ACADEMIC POLYMATH",
+          main: "CAMBRIDGE & HARVARD FELLOW",
+          time: 13.5,
+          svg: `<polygon points="29,10 50,22 29,34 8,22" stroke="#f43f5e" stroke-width="2.5" fill="none"/>`
         }
       },
       {
@@ -946,44 +1069,45 @@
         year: "1997",
         term: "1997 – 2002",
         duration: 17,
-        x: 14400,
-        y: -330,
+        x: 14400, y: -330,
+        moodBg: "radial-gradient(circle at 50% 45%, rgba(45, 32, 14, 0.82) 0%, rgba(9, 11, 20, 0.95) 58%, #020307 100%)",
+        flareTime: 3.0,
         img: "assets/images/10_kr_narayanan.png",
         fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/K._R._Narayanan_official_portrait.jpg/440px-K._R._Narayanan_official_portrait.jpg",
         bgImg: "assets/images/10_kr_narayanan_bg.png",
         bgMeta: { title: "Diplomatic Hall & Armillary Globe", bottom: "30px", w: "490px", h: "420px", opacity: 0.88 },
-        // e1 (First in VO): Walked miles barefoot -> Placed RIGHT (+20% Bigger)
         e1: {
-          side: "right",
-          pos: "right: -440px; top: 40px; width: 420px;",
-          rot: 3.5,
-          theme: "headline-gold",
-          fontSize: "46px",
-          iconSize: "96px",
-          title: "BAREFOOT TO SCHOOL",
-          sub: "Kerala Poverty to L.S.E. Topper",
+          pos: "right: -465px; top: 20px; width: 430px;",
+          rot: 2.8, theme: "headline-gold", fontSize: "40px", svgH: "190px",
+          title: "15 KM BAREFOOT TO SCHOOL",
+          sub: "Listened Outside Class When Fees Lacked",
           time: 3.0,
-          svg: `<ellipse cx="36" cy="46" rx="10" ry="20" class="drawn-stroke"/><circle cx="28" cy="22" r="4" class="drawn-stroke"/><circle cx="36" cy="18" r="4" class="drawn-stroke"/><circle cx="44" cy="22" r="4" class="drawn-stroke"/>`
+          svg: `
+            <ellipse cx="72" cy="114" rx="16" ry="32" transform="rotate(-12 72 114)" class="svg-part svg-fill-gold"/>
+            <ellipse cx="120" cy="88" rx="16" ry="32" transform="rotate(10 120 88)" class="svg-part svg-fill-gold"/>
+            <polygon points="196,34 248,56 196,78 144,56" class="svg-part svg-cyan act-float"/>
+          `
         },
-        // e2 (Second in VO): Stood in public queue to vote -> Placed LEFT (-20% Compact, at ~9.0s)
         e2: {
-          side: "left",
-          pos: "left: -420px; top: 80px; width: 340px;",
-          rot: -2.8,
-          theme: "headline-cyan",
-          fontSize: "32px",
-          iconSize: "68px",
-          title: "ORDINARY CITIZEN VOTE",
-          sub: "Stood in Public Voting Queue",
+          pos: "left: -445px; top: 45px; width: 395px;",
+          rot: -2.5, theme: "headline-cyan", fontSize: "34px", svgH: "180px",
+          title: "STOOD IN CITIZEN QUEUE",
+          sub: "Voted in 1998 Like an Ordinary Voter",
           time: 9.0,
-          svg: `<rect x="18" y="16" width="32" height="40" rx="4" class="drawn-stroke"/><path d="M24 34l7 7 14-14" stroke="#00f2fe" stroke-width="3.5" class="drawn-stroke"/>`
+          svg: `
+            <circle cx="66" cy="58" r="11" class="svg-part"/>
+            <path d="M48 136 C48 96, 84 96, 84 136" class="svg-part"/>
+            <circle cx="136" cy="52" r="13" class="svg-part svg-cyan act-pulse"/>
+            <path d="M114 136 C114 90, 158 90, 158 136" class="svg-part svg-cyan"/>
+            <rect x="196" y="42" width="52" height="94" rx="6" class="svg-part svg-fill-gold"/>
+          `
         },
         stamp: {
-          shapeClass: "stamp-press",
-          pos: "right: -440px; bottom: 25px;",
-          badge: "📰 1945 TIMES INTERVIEW",
+          pos: "right: -460px; bottom: 18px;",
+          badge: "📰 JOURNALISTIC SCOOP • 1945",
           main: "INTERVIEWED MAHATMA GANDHI",
-          time: 13.5
+          time: 13.5,
+          svg: `<circle cx="20" cy="29" r="9" stroke="#00f2fe" stroke-width="2.5" fill="none"/><circle cx="38" cy="29" r="9" stroke="#00f2fe" stroke-width="2.5" fill="none"/>`
         }
       },
       {
@@ -992,44 +1116,45 @@
         year: "2002",
         term: "2002 – 2007",
         duration: 17,
-        x: 16000,
-        y: 400,
+        x: 16000, y: 400,
+        moodBg: "radial-gradient(circle at 50% 45%, rgba(64, 34, 12, 0.85) 0%, rgba(10, 12, 24, 0.95) 58%, #020307 100%)",
+        flareTime: 9.0,
         img: "assets/images/11_apj_abdul_kalam.png",
         fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/A._P._J._Abdul_Kalam_official_portrait.jpg/440px-A._P._J._Abdul_Kalam_official_portrait.jpg",
         bgImg: "assets/images/11_apj_abdul_kalam_bg.png",
         bgMeta: { title: "Pokhran-II Desert & SLV-3 Rocket Gantry", bottom: "25px", w: "510px", h: "430px", opacity: 0.9 },
-        // e1 (First in VO): Invited childhood cobbler to oath -> Placed LEFT (+20% Bigger)
         e1: {
-          side: "left",
-          pos: "left: -440px; top: 40px; width: 420px;",
-          rot: -3.5,
-          theme: "headline-gold",
-          fontSize: "44px",
-          iconSize: "96px",
-          title: "COBBLER AS VIP GUEST",
-          sub: "Invited Childhood Friends to Oath",
+          pos: "left: -465px; top: 20px; width: 430px;",
+          rot: -2.8, theme: "headline-gold", fontSize: "40px", svgH: "190px",
+          title: "COBBLER AS STATE VIP",
+          sub: "Kerala Shoe-Mender & Café Owner at Oath",
           time: 3.0,
-          svg: `<path d="M18 56c13-9 20-9 32-2l24 4v10H18z" class="drawn-stroke"/><circle cx="30" cy="50" r="3.5" class="drawn-stroke"/><path d="M18 34l11 11" class="drawn-stroke"/>`
+          svg: `
+            <path d="M44 114 Q 140 94 236 114 L 252 146 Q 140 162 28 146 Z" class="svg-part svg-crimson"/>
+            <path d="M78 106 C98 72, 138 74, 168 92 L208 98 C216 100, 216 114, 198 114 L78 114 Z" class="svg-part svg-fill-gold act-float"/>
+            <polygon points="140,20 147,36 164,36 150,46 155,62 140,52 125,62 130,46 116,36 133,36" class="svg-part svg-fill-gold act-pulse"/>
+          `
         },
-        // e2 (Second in VO): Newspaper boy to missile defense -> Placed RIGHT (-20% Compact, at ~9.0s)
         e2: {
-          side: "right",
-          pos: "right: -420px; top: 80px; width: 340px;",
-          rot: 3.0,
-          theme: "headline-crimson",
-          fontSize: "32px",
-          iconSize: "68px",
-          title: "POKHRAN & AGNI MISSILE",
-          sub: "Engineered India's Missile Shield",
+          pos: "right: -445px; top: 45px; width: 395px;",
+          rot: 2.5, theme: "headline-crimson", fontSize: "34px", svgH: "180px",
+          title: "AGNI & POKHRAN SHIELD",
+          sub: "Paperboy Who Built India's Deterrent",
           time: 9.0,
-          svg: `<path d="M34 9c5 5 10 16 10 27l-7 4-4-5-4 5-7-4c0-11 5-22 10-27z" class="drawn-stroke"/><circle cx="34" cy="21" r="3" class="drawn-stroke"/><path d="M30 41l4 9 4-9" stroke="#ff3b47" stroke-width="2.5" class="drawn-stroke"/>`
+          svg: `
+            <g class="act-float">
+              <path d="M140 12 C156 36, 160 66, 160 104 L120 104 C120 66, 124 36, 140 12 Z" class="svg-part svg-fill-gold"/>
+              <path d="M120 82 L94 112 L120 104 Z M160 82 L186 112 L160 104 Z" class="svg-part svg-crimson"/>
+            </g>
+            <path d="M124 104 C116 132, 132 154, 140 168 C148 154, 164 132, 156 104 Z" class="svg-part svg-crimson act-flame-1"/>
+          `
         },
         stamp: {
-          shapeClass: "stamp-cheque",
-          pos: "left: -440px; bottom: 25px;",
-          badge: "🧾 PERSONAL BANK ACCOUNT",
-          main: "PAID RELATIVES' HOTEL BILL",
-          time: 13.5
+          pos: "left: -460px; bottom: 18px;",
+          badge: "🧾 ₹3.52 LAKH PERSONAL CHEQUE",
+          main: "PAID FAMILY'S PALACE EXPENSE",
+          time: 13.5,
+          svg: `<rect x="8" y="16" width="42" height="26" rx="3" stroke="#f59e0b" stroke-width="2.5" fill="none"/>`
         }
       },
       {
@@ -1038,44 +1163,42 @@
         year: "2007",
         term: "2007 – 2012",
         duration: 18,
-        x: 17600,
-        y: -380,
+        x: 17600, y: -380,
+        moodBg: "radial-gradient(circle at 50% 45%, rgba(14, 48, 72, 0.84) 0%, rgba(6, 11, 22, 0.95) 58%, #020307 100%)",
+        flareTime: 9.0,
         img: "assets/images/12_pratibha_patil.png",
         fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Pratibha_Patil_official_portrait.jpg/440px-Pratibha_Patil_official_portrait.jpg",
         bgImg: "assets/images/12_pratibha_patil_bg.png",
         bgMeta: { title: "Sukhoi-30 Fighter Jet & Runway Tarmac", bottom: "20px", w: "510px", h: "420px", opacity: 0.9 },
-        // e1 (First in VO): Shattered 60-year glass ceiling -> Placed RIGHT (+20% Bigger)
         e1: {
-          side: "right",
-          pos: "right: -440px; top: 40px; width: 420px;",
-          rot: 3.5,
-          theme: "headline-gold",
-          fontSize: "44px",
-          iconSize: "96px",
+          pos: "right: -465px; top: 20px; width: 430px;",
+          rot: 2.8, theme: "headline-gold", fontSize: "40px", svgH: "190px",
           title: "60-YEAR GLASS CEILING",
-          sub: "First Woman Supreme Commander",
+          sub: "First Woman Supreme Commander of India",
           time: 3.2,
-          svg: `<polygon points="48,14 74,30 60,62 28,54 22,28" class="drawn-stroke"/><path d="M48 14l11 48M28 54l46-24" class="drawn-stroke"/>`
+          svg: `
+            <polygon points="140,18 192,58 172,138 108,138 88,58" class="svg-part svg-fill-gold"/>
+            <path d="M140 18 L140 138 M88 58 L192 58 M108 138 L172 42" class="svg-part svg-cyan"/>
+            <polygon points="64,38 82,48 70,66" class="svg-part svg-cyan act-float"/>
+          `
         },
-        // e2 (Second in VO): Sukhoi-30 Mach speed at 74 -> Placed LEFT (-20% Compact, at ~9.0s)
         e2: {
-          side: "left",
-          pos: "left: -420px; top: 80px; width: 340px;",
-          rot: -2.8,
-          theme: "headline-cyan",
-          fontSize: "32px",
-          iconSize: "68px",
-          title: "MACH 2.0 SUPERSONIC",
-          sub: "Sukhoi-30 Sortie at Age 74",
+          pos: "left: -445px; top: 45px; width: 395px;",
+          rot: -2.5, theme: "headline-cyan", fontSize: "34px", svgH: "180px",
+          title: "SUKHOI-30 AT AGE 74",
+          sub: "Flew Supersonic Sortie in G-Suit",
           time: 9.0,
-          svg: `<path d="M34 11l7 16 18 7-18 3-3 14-3-14-18-3 18-7z" class="drawn-stroke"/><circle cx="34" cy="27" r="3.5" class="drawn-stroke"/>`
+          svg: `
+            <path d="M188 26 Q 112 84 188 142" class="svg-part svg-cyan act-pulse" stroke-width="3.5"/>
+            <path d="M238 84 L154 58 L112 32 L124 74 L68 78 L54 64 L54 104 L68 90 L124 94 L112 136 L154 110 Z" class="svg-part svg-fill-gold act-float"/>
+          `
         },
         stamp: {
-          shapeClass: "stamp-rosette",
-          pos: "right: -440px; bottom: 25px;",
-          badge: "🏓 STATE ATHLETICS ACE",
-          main: "TABLE TENNIS CHAMPION",
-          time: 14.5
+          pos: "right: -460px; bottom: 18px;",
+          badge: "⚖️ CLEMENCY RECORD",
+          main: "COMMUTED 35 DEATH SENTENCES",
+          time: 14.5,
+          svg: `<circle cx="29" cy="29" r="20" stroke="#38bdf8" stroke-width="2.5" fill="none"/>`
         }
       },
       {
@@ -1084,44 +1207,45 @@
         year: "2012",
         term: "2012 – 2017",
         duration: 17,
-        x: 19200,
-        y: 340,
+        x: 19200, y: 340,
+        moodBg: "radial-gradient(circle at 50% 45%, rgba(58, 22, 24, 0.84) 0%, rgba(9, 9, 18, 0.95) 58%, #020306 100%)",
+        flareTime: 9.0,
         img: "assets/images/13_pranab_mukherjee.png",
         fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Pranab_Mukherjee_official_portrait.jpg/440px-Pranab_Mukherjee_official_portrait.jpg",
         bgImg: "assets/images/13_pranab_mukherjee_bg.png",
         bgMeta: { title: "Circular Parliament Colonnade & Corridor", bottom: "35px", w: "490px", h: "400px", opacity: 0.88 },
-        // e1 (First in VO): 30-year budget memory -> Placed LEFT (+20% Bigger)
         e1: {
-          side: "left",
-          pos: "left: -440px; top: 40px; width: 420px;",
-          rot: -3.5,
-          theme: "headline-gold",
-          fontSize: "44px",
-          iconSize: "96px",
-          title: "30-YEAR BUDGET MEMORY",
-          sub: "Recalled Data Without Any Notes",
+          pos: "left: -465px; top: 20px; width: 430px;",
+          rot: -2.8, theme: "headline-gold", fontSize: "40px", svgH: "190px",
+          title: "WALKING ENCYCLOPEDIA",
+          sub: "Recalled 30-Year Budget Clauses Verbatim",
           time: 3.0,
-          svg: `<path d="M48 20c-15 0-22 10-22 20 0 10 9 14 11 20h22c2-6 11-10 11-20 0-10-8-20-22-20z" class="drawn-stroke"/><path d="M36 34c6-2 15-2 19 0" class="drawn-stroke"/>`
+          svg: `
+            <rect x="78" y="48" width="124" height="88" rx="10" class="svg-part svg-crimson"/>
+            <path d="M116 48 V32 H164 V48" class="svg-part" stroke-width="3.5"/>
+            <circle cx="140" cy="92" r="24" class="svg-part svg-fill-gold act-pulse"/>
+          `
         },
-        // e2 (Second in VO): Iron terror verdicts -> Placed RIGHT (-20% Compact, at ~9.0s)
         e2: {
-          side: "right",
-          pos: "right: -420px; top: 80px; width: 340px;",
-          rot: 3.0,
-          theme: "headline-crimson",
-          fontSize: "32px",
-          iconSize: "68px",
-          title: "IRON TERROR VERDICTS",
-          sub: "Rejected Clemency Petitions",
+          pos: "right: -445px; top: 45px; width: 395px;",
+          rot: 2.5, theme: "headline-crimson", fontSize: "34px", svgH: "180px",
+          title: "UNYIELDING TERROR VERDICTS",
+          sub: "Signed Kasab & Afzal Guru Warrants",
           time: 9.0,
-          svg: `<rect x="16" y="16" width="34" height="16" rx="2.5" class="drawn-stroke"/><path d="M34 32v20M26 52h16" class="drawn-stroke" stroke-width="3.5"/>`
+          svg: `
+            <g class="act-gavel">
+              <rect x="86" y="34" width="76" height="34" rx="6" transform="rotate(-18 124 51)" class="svg-part svg-crimson"/>
+              <line x1="132" y1="66" x2="188" y2="122" class="svg-part" stroke-width="6"/>
+            </g>
+            <rect x="58" y="128" width="112" height="18" rx="4" class="svg-part svg-fill-gold"/>
+          `
         },
         stamp: {
-          shapeClass: "stamp-diary",
-          pos: "left: -440px; bottom: 25px;",
-          badge: "📔 CONFIDENTIAL ARCHIVES",
-          main: "40 YEARS SECRET DIARIES",
-          time: 13.5
+          pos: "left: -460px; bottom: 18px;",
+          badge: "📔 18 HOURS DAILY WORKHORSE",
+          main: "40 YEARS OF SECRET DIARIES",
+          time: 13.5,
+          svg: `<rect x="14" y="10" width="30" height="38" rx="3" stroke="#fb7185" stroke-width="2.5" fill="none"/>`
         }
       },
       {
@@ -1130,44 +1254,47 @@
         year: "2017",
         term: "2017 – 2022",
         duration: 17,
-        x: 20800,
-        y: -310,
+        x: 20800, y: -310,
+        moodBg: "radial-gradient(circle at 50% 45%, rgba(62, 34, 14, 0.85) 0%, rgba(8, 11, 20, 0.95) 58%, #020307 100%)",
+        flareTime: 3.0,
         img: "assets/images/14_ram_nath_kovind.png",
         fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Ram_Nath_Kovind_official_portrait.jpg/440px-Ram_Nath_Kovind_official_portrait.jpg",
         bgImg: "assets/images/14_ram_nath_kovind_bg.png",
         bgMeta: { title: "Courthouse Marble Steps & Ashoka Pillar", bottom: "30px", w: "480px", h: "410px", opacity: 0.88 },
-        // e1 (First in VO): Burnt mud hut -> Placed RIGHT (+20% Bigger)
         e1: {
-          side: "right",
-          pos: "right: -440px; top: 40px; width: 420px;",
-          rot: 3.5,
-          theme: "headline-gold",
-          fontSize: "44px",
-          iconSize: "96px",
-          title: "MUD HUT TO RAISINA",
-          sub: "Childhood Home Burnt in Storm",
+          pos: "right: -465px; top: 20px; width: 430px;",
+          rot: 2.8, theme: "headline-gold", fontSize: "40px", svgH: "190px",
+          title: "BURNT MUD HUT TO RAISINA",
+          sub: "Survived Childhood Fire in Paraunkh Village",
           time: 3.0,
-          svg: `<path d="M20 70l28-40 28 40H20z" class="drawn-stroke"/><path d="M34 70v-18h24v18M24 28l14-14 10 10" class="drawn-stroke"/>`
+          svg: `
+            <path d="M28 96 L74 52 L120 96 Z" class="svg-part svg-crimson"/>
+            <rect x="40" y="96" width="68" height="46" class="svg-part svg-fill-gold"/>
+            <path d="M64 52 C58 32, 74 20, 78 36 C84 22, 92 38, 78 52 Z" class="svg-part svg-crimson act-flame-1"/>
+            <path d="M128 96 L158 96" class="svg-part svg-cyan" stroke-width="3"/>
+            <path d="M174 88 A28 28 0 0 1 230 88 Z" class="svg-part svg-fill-gold"/>
+            <rect x="166" y="88" width="72" height="54" class="svg-part svg-fill-gold"/>
+          `
         },
-        // e2 (Second in VO): Kneeled in village soil -> Placed LEFT (-20% Compact, at ~9.0s)
         e2: {
-          side: "left",
-          pos: "left: -420px; top: 80px; width: 340px;",
-          rot: -2.8,
-          theme: "headline-cyan",
-          fontSize: "32px",
-          iconSize: "68px",
-          title: "KNEELED IN VILLAGE SOIL",
-          sub: "Arrived by Presidential Train",
+          pos: "left: -445px; top: 45px; width: 395px;",
+          rot: -2.5, theme: "headline-cyan", fontSize: "34px", svgH: "180px",
+          title: "TOUCHED NATIVE SOIL",
+          sub: "Bowed Forehead to Village Earth by Train",
           time: 9.0,
-          svg: `<path d="M14 48c12-10 24-10 36 0" class="drawn-stroke"/><circle cx="32" cy="27" r="9" class="drawn-stroke"/>`
+          svg: `
+            <path d="M24 134 Q 140 112 256 134" class="svg-part" stroke-width="3.5"/>
+            <circle cx="156" cy="96" r="12" class="svg-part svg-fill-gold"/>
+            <path d="M92 130 C98 92, 134 86, 148 112 L176 128 Z" class="svg-part svg-fill-gold"/>
+            <circle cx="178" cy="126" r="24" class="svg-part svg-cyan act-pulse"/>
+          `
         },
         stamp: {
-          shapeClass: "stamp-deed",
-          pos: "right: -440px; bottom: 25px;",
+          pos: "right: -460px; bottom: 18px;",
           badge: "🏡 ANCESTRAL GIFT DEED",
-          main: "DONATED ANCESTRAL HOME",
-          time: 13.5
+          main: "DONATED HOME TO VILLAGE",
+          time: 13.5,
+          svg: `<path d="M12 28 L29 12 L46 28 V48 H12 Z" stroke="#fbbf24" stroke-width="2.5" fill="none"/>`
         }
       },
       {
@@ -1176,55 +1303,55 @@
         year: "2022",
         term: "2022 – Present",
         duration: 21,
-        x: 22400,
-        y: 10,
+        x: 22400, y: 10,
+        moodBg: "radial-gradient(circle at 50% 45%, rgba(68, 38, 12, 0.86) 0%, rgba(10, 12, 22, 0.95) 58%, #020307 100%)",
+        flareTime: 3.2,
         img: "assets/images/15_droupadi_murmu.png",
         fallbackImg: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Droupadi_Murmu_official_portrait.jpg/440px-Droupadi_Murmu_official_portrait.jpg",
         bgImg: "assets/images/15_droupadi_murmu_bg.png",
         bgMeta: { title: "New Parliament & Santhali Stone Plinth", bottom: "25px", w: "500px", h: "420px", opacity: 0.9 },
-        // e1 (First in VO): Converted home to free school -> Placed LEFT (+20% Bigger)
         e1: {
-          side: "left",
-          pos: "left: -440px; top: 40px; width: 420px;",
-          rot: -3.5,
-          theme: "headline-gold",
-          fontSize: "44px",
-          iconSize: "96px",
-          title: "TRIUMPH OVER TRAGEDY",
-          sub: "Home Converted to Free School",
+          pos: "left: -465px; top: 20px; width: 430px;",
+          rot: -2.8, theme: "headline-gold", fontSize: "40px", svgH: "190px",
+          title: "HOME TURNED INTO SCHOOL",
+          sub: "Built SLS Boarding School in Memory of Family",
           time: 3.2,
-          svg: `<path d="M18 42l26-22 26 22v24H18z" class="drawn-stroke"/><path d="M32 66v-16h16v16" class="drawn-stroke"/><circle cx="44" cy="30" r="5" class="drawn-stroke"/>`
+          svg: `
+            <path d="M44 138 Q 92 122 140 138 Q 188 122 236 138 L 236 152 Q 188 136 140 152 Q 92 136 44 152 Z" class="svg-part svg-cyan"/>
+            <path d="M76 82 L140 36 L204 82 Z" class="svg-part svg-fill-gold"/>
+            <rect x="92" y="82" width="96" height="52" class="svg-part svg-fill-gold"/>
+            <circle cx="140" cy="64" r="12" class="svg-part svg-crimson act-pulse"/>
+          `
         },
-        // e2 (Second in VO): 1st tribal president -> Placed RIGHT (-20% Compact, at ~9.2s)
         e2: {
-          side: "right",
-          pos: "right: -420px; top: 80px; width: 340px;",
-          rot: 3.0,
-          theme: "headline-cyan",
-          fontSize: "32px",
-          iconSize: "68px",
+          pos: "right: -445px; top: 45px; width: 395px;",
+          rot: 2.5, theme: "headline-cyan", fontSize: "34px", svgH: "180px",
           title: "1ST TRIBAL PRESIDENT",
-          sub: "Youngest Head of Indian Republic",
+          sub: "Born in Independent India • Mayurbhanj Roots",
           time: 9.2,
-          svg: `<path d="M34 11c-10 10-14 23-5 35 3 5 14 5 18 0 9-12 5-25-13-35z" class="drawn-stroke"/><path d="M34 21v26" class="drawn-stroke"/>`
+          svg: `
+            <g class="act-spin">
+              <circle cx="140" cy="84" r="52" class="svg-part" stroke-dasharray="8 6"/>
+            </g>
+            <polygon points="140,26 196,122 84,122" class="svg-part svg-cyan"/>
+            <circle cx="140" cy="90" r="18" class="svg-part svg-fill-gold act-pulse"/>
+          `
         },
         stamp: {
-          shapeClass: "stamp-lotus",
-          pos: "left: -440px; bottom: 25px;",
-          badge: "👁️ VISION BANK DONOR",
-          main: "PLEDGED EYES & SLS TRUST",
-          time: 17.0
+          pos: "left: -460px; bottom: 18px;",
+          badge: "👁️ HUMANITARIAN PLEDGE",
+          main: "DONATED EYES & BUILT TRUST",
+          time: 17.0,
+          svg: `<path d="M8 29 Q 29 10 50 29 Q 29 48 8 29 Z" stroke="#f59e0b" stroke-width="2.5" fill="none"/><circle cx="29" cy="29" r="8" stroke="#fffdf2" stroke-width="2" fill="none"/>`
         }
       }
     ];
 
     const world = document.getElementById('canvas-world');
     const svgConnections = document.getElementById('svg-connections');
+    const handmadeCardD = "M 32 8 C 145 4, 345 12, 460 7 C 482 8, 492 24, 490 48 C 494 190, 488 540, 491 688 C 490 710, 478 724, 456 723 C 330 726, 145 721, 34 724 C 16 723, 6 708, 8 688 C 5 550, 10 190, 7 48 C 6 26, 16 8, 32 8 Z";
 
-    // Organic Wobbly Rectangle Path for 480x700 card (perimeter ~ 2460px)
-    const handmadeCardD = "M 32 8 C 145 4, 355 12, 470 7 C 492 8, 502 24, 500 48 C 504 190, 498 540, 501 688 C 500 710, 488 724, 466 723 C 340 726, 145 721, 34 724 C 16 723, 6 708, 8 688 C 5 550, 10 190, 7 48 C 6 26, 16 8, 32 8 Z";
-
-    // 1. Build All 15 President Nodes with Asymmetric Kinetic Elements
+    // Build All 15 Nodes on the Infinite Canvas
     PRESIDENTS.forEach((p, i) => {
       const node = document.createElement('div');
       node.className = 'pres-node';
@@ -1233,57 +1360,52 @@
       node.style.top = `${p.y}px`;
 
       node.innerHTML = `
-        <!-- Main Center Subject Card -->
         <div class="card-core" id="core-${i}">
-          <svg class="handmade-border-svg" viewBox="0 0 508 732">
+          <svg class="handmade-border-svg" viewBox="0 0 498 732">
             <path id="border-path-${i}" class="progressive-border-path" d="${handmadeCardD}" stroke-dasharray="2460" stroke-dashoffset="2460" />
           </svg>
           <div class="year-behind-head" data-layout-allow-overlap="true" data-layout-allow-occlusion="true">${p.year}</div>
-
-          <!-- Layer 2: Background Landmark Cutout (translateZ: 10px) -->
           <div class="bg-landmark-box" id="bg-landmark-${i}" style="bottom: ${p.bgMeta.bottom}; width: ${p.bgMeta.w}; height: ${p.bgMeta.h}; opacity: ${p.bgMeta.opacity};">
             <img class="bg-landmark-img" src="${p.bgImg}" onerror="this.style.opacity='0'" alt="${p.bgMeta.title}">
           </div>
-
-          <!-- Layer 3: Foreground President Cutout (translateZ: 85px for Heavy 2.5D Parallax) -->
           <div class="cutout-box" id="cutout-${i}">
             <img class="cutout-img" src="${p.img}" onerror="this.src='${p.fallbackImg}'" alt="${p.name}">
           </div>
-
-          <!-- Layer 4: Card Bottom Details -->
           <div class="card-details" id="card-details-${i}">
             <span class="term-badge">${p.term}</span>
             <h2 class="pres-name">${p.name}</h2>
           </div>
         </div>
 
-        <!-- FREESTANDING KINETIC ELEMENT 1 (Voiceover Event 1) -->
+        <!-- FREESTANDING CANVAS ELEMENT 1 (No Card Box) -->
         <div class="canvas-group" id="elem-1-${i}" style="${p.e1.pos} transform: rotate(${p.e1.rot}deg);">
-          <div class="group-icon-wrap" id="icon-1-${i}" style="width: ${p.e1.iconSize}; height: ${p.e1.iconSize};">
-            <svg class="motion-svg-art" viewBox="0 0 88 88">${p.e1.svg}</svg>
+          <div class="group-icon-wrap" id="icon-1-${i}" style="height: ${p.e1.svgH};">
+            <svg class="motion-svg-art" viewBox="0 0 280 175" preserveAspectRatio="xMidYMid meet">${p.e1.svg}</svg>
           </div>
           <div class="group-headline ${p.e1.theme}" id="head-1-${i}" style="font-size: ${p.e1.fontSize};">${p.e1.title}</div>
           <div class="group-sub" id="sub-1-${i}">✦ ${p.e1.sub}</div>
         </div>
 
-        <!-- FREESTANDING KINETIC ELEMENT 2 (Voiceover Event 2 - Just before 10s mark) -->
+        <!-- FREESTANDING CANVAS ELEMENT 2 (No Card Box) -->
         <div class="canvas-group" id="elem-2-${i}" style="${p.e2.pos} transform: rotate(${p.e2.rot}deg);">
-          <div class="group-icon-wrap" id="icon-2-${i}" style="width: ${p.e2.iconSize}; height: ${p.e2.iconSize};">
-            <svg class="motion-svg-art" viewBox="0 0 88 88">${p.e2.svg}</svg>
+          <div class="group-icon-wrap" id="icon-2-${i}" style="height: ${p.e2.svgH};">
+            <svg class="motion-svg-art" viewBox="0 0 280 175" preserveAspectRatio="xMidYMid meet">${p.e2.svg}</svg>
           </div>
           <div class="group-headline ${p.e2.theme}" id="head-2-${i}" style="font-size: ${p.e2.fontSize};">${p.e2.title}</div>
           <div class="group-sub" id="sub-2-${i}">✦ ${p.e2.sub}</div>
         </div>
 
-        <!-- 3RD ELEMENT: BESPOKE BIG IMPACT STAMP (Last 3.5s) -->
-        <div class="impact-stamp-card ${p.stamp.shapeClass}" id="stamp-${i}" style="${p.stamp.pos}">
-          <div class="stamp-micro-badge">${p.stamp.badge}</div>
-          <div class="stamp-main-text">${p.stamp.main}</div>
+        <!-- 3RD ELEMENT: STAMP -->
+        <div class="impact-stamp-card" id="stamp-${i}" style="${p.stamp.pos}">
+          <svg class="stamp-emblem-svg" viewBox="0 0 58 58">${p.stamp.svg}</svg>
+          <div>
+            <div class="stamp-micro-badge">${p.stamp.badge}</div>
+            <div class="stamp-main-text">${p.stamp.main}</div>
+          </div>
         </div>
       `;
       world.appendChild(node);
 
-      // Connecting Curved Line to next node across 2D plane
       if (i > 0) {
         const prev = PRESIDENTS[i - 1];
         const midX = (prev.x + p.x) / 2;
@@ -1291,257 +1413,151 @@
         const arrow = document.createElementNS("http://www.w3.org/2000/svg", "path");
         arrow.setAttribute("class", "connector-line");
         arrow.setAttribute("id", `arrow-${i}`);
-        arrow.setAttribute("d", `M ${prev.x + 240} ${prev.y} Q ${midX} ${midY} ${p.x - 240} ${p.y}`);
+        arrow.setAttribute("d", `M ${prev.x + 235} ${prev.y} Q ${midX} ${midY} ${p.x - 235} ${p.y}`);
         arrow.setAttribute("stroke-dasharray", "1800");
         arrow.setAttribute("stroke-dashoffset", "1800");
         svgConnections.appendChild(arrow);
       }
     });
 
-    // 2. HyperFrames Deterministic GSAP Timeline Setup
+    // Master GSAP Timeline
     const tl = gsap.timeline({ paused: true });
     window.__timelines = window.__timelines || {};
     window.__timelines.main = tl;
 
-    // Full Animated Hand-Drawn Gradient Progress Bar from 0 to 268s
-    tl.fromTo("#progressFillPath", 
-      { strokeDashoffset: 1760 }, 
-      { strokeDashoffset: 0, duration: 268, ease: "none" }, 
-      0
-    );
+    // Helper: Trigger Warm Burning Flare Surge in Background (Replaces Lightning)
+    function scheduleBurningFlare(timeline, flareTime) {
+      timeline.fromTo("#heat-flare-burst",
+        { opacity: 0.2, scale: 0.92 },
+        { opacity: 0.85, scale: 1.12, duration: 0.9, yoyo: true, repeat: 1, ease: "sine.inOut" },
+        flareTime
+      );
+      timeline.fromTo(["#bg-flare-1", "#bg-flare-2", "#bg-flare-3"],
+        { scale: 0.9, opacity: 0.35 },
+        { scale: 1.35, opacity: 0.8, duration: 1.1, stagger: 0.15, yoyo: true, repeat: 1, ease: "sine.inOut" },
+        flareTime
+      );
+    }
 
-    // Dynamic gradient color shift across the 268 seconds
-    const gradientStops = [
-      { t: 0, s1: "#ff3b47", s2: "#ffbe3b", s3: "#00f2fe", s4: "#4facfe" },
-      { t: 56, s1: "#ffbe3b", s2: "#00f2fe", s3: "#4facfe", s4: "#7000ff" },
-      { t: 110, s1: "#00f2fe", s2: "#4facfe", s3: "#7000ff", s4: "#ff007f" },
-      { t: 178, s1: "#4facfe", s2: "#ff3b47", s3: "#ffbe3b", s4: "#00f2fe" },
-      { t: 230, s1: "#ffbe3b", s2: "#ff3b47", s3: "#7000ff", s4: "#fffdf2" }
-    ];
-
-    gradientStops.forEach(stop => {
-      tl.to("#stop1", { stopColor: stop.s1, duration: 10, ease: "sine.inOut" }, stop.t);
-      tl.to("#stop2", { stopColor: stop.s2, duration: 10, ease: "sine.inOut" }, stop.t);
-      tl.to("#stop3", { stopColor: stop.s3, duration: 10, ease: "sine.inOut" }, stop.t);
-      tl.to("#stop4", { stopColor: stop.s4, duration: 10, ease: "sine.inOut" }, stop.t);
+    // Continuous Rising Burning Embers across 268s
+    gsap.utils.toArray(".ambient-ember").forEach((ember, idx) => {
+      tl.to(ember, {
+        y: -360 - (idx % 5) * 110,
+        x: (idx % 2 === 0 ? 1 : -1) * (70 + (idx % 4) * 35),
+        duration: 268,
+        ease: "none"
+      }, 0);
     });
+
+    // Progress Bar Fill
+    tl.fromTo("#progressFillPath", { strokeDashoffset: 1760 }, { strokeDashoffset: 0, duration: 268, ease: "none" }, 0);
 
     let timeOffset = 0;
 
     PRESIDENTS.forEach((p, i) => {
       const node = `#node-${i}`;
-      const core = `#core-${i}`;
       const border = `#border-path-${i}`;
       const bgLandmark = `#bg-landmark-${i}`;
       const cutout = `#cutout-${i}`;
       const details = `#card-details-${i}`;
 
-      const icon1 = `#icon-1-${i}`;
+      const parts1 = `#icon-1-${i} .svg-part`;
       const head1 = `#head-1-${i}`;
       const sub1 = `#sub-1-${i}`;
-      const svgStroke1 = `#icon-1-${i} .drawn-stroke`;
 
-      const icon2 = `#icon-2-${i}`;
+      const parts2 = `#icon-2-${i} .svg-part`;
       const head2 = `#head-2-${i}`;
       const sub2 = `#sub-2-${i}`;
-      const svgStroke2 = `#icon-2-${i} .drawn-stroke`;
 
       const stamp = `#stamp-${i}`;
-
       const t = timeOffset;
       const dur = p.duration;
 
+      // Shift Atmospheric Mood & Schedule Burning Flare
+      tl.to("#mood-backdrop", { background: p.moodBg, duration: 1.5, ease: "sine.inOut" }, t);
+      if (typeof p.flareTime === "number") {
+        scheduleBurningFlare(tl, t + p.flareTime);
+      }
+
       if (i === 0) {
-        // Initial Scene Focus (Center Node Lands)
         tl.set("#canvas-world", { x: -p.x, y: -p.y }, 0);
         tl.set(node, { scale: 1, opacity: 1, z: 45 }, 0);
         tl.set("#counterIndicator", { textContent: "01 / 15" }, 0);
-
-        // Year reveals behind head
-        tl.fromTo(`${node} .year-behind-head`, { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 0.2);
-
-        // Background Landmark Cutout appears
-        tl.fromTo(bgLandmark, { scale: 0.92, opacity: 0, z: -10 }, { scale: 1, opacity: p.bgMeta.opacity, z: 10, duration: 0.7, ease: "power2.out" }, 0.4);
-
-        // Foreground President Cutout drops with realistic bounce
+        tl.fromTo(`${node} .year-behind-head`, { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, 0.2);
+        tl.fromTo(bgLandmark, { scale: 0.92, opacity: 0, z: -10 }, { scale: 1, opacity: p.bgMeta.opacity, z: 10, duration: 0.7 }, 0.4);
         tl.fromTo(cutout, { y: 45, scale: 0.92, opacity: 0, z: 40 }, { y: 0, scale: 1, opacity: 1, z: 85, duration: 0.75, ease: "back.out(1.4)" }, 0.7);
-
-        // Card Bottom Details illuminate
         tl.fromTo(details, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5 }, 1.0);
-
-        // Progressive Border: Runs through the ENTIRE duration of this audio
         tl.fromTo(border, { strokeDashoffset: 2460 }, { strokeDashoffset: 0, duration: dur, ease: "linear" }, 0);
-
-        // ==============================================================
-        // ELEMENT 1 REVEAL SEQUENCE (Voiceover Event 1 at ~3.0s)
-        // Icon -> Big Text -> Small Text
-        // ==============================================================
-        const e1Start = p.e1.time;
-        tl.fromTo(icon1, 
-          { scale: 0, opacity: 0, rotate: -20 }, 
-          { scale: 1, opacity: 1, rotate: 0, duration: 0.5, ease: "back.out(1.8)" }, 
-          e1Start
-        );
-        tl.fromTo(svgStroke1, 
-          { strokeDasharray: 300, strokeDashoffset: 300 }, 
-          { strokeDashoffset: 0, duration: 0.85, ease: "power2.out" }, 
-          e1Start + 0.1
-        );
-        tl.fromTo(head1, 
-          { opacity: 0, y: 24, filter: "blur(6px)" }, 
-          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.55, ease: "power3.out" }, 
-          e1Start + 0.35
-        );
-        tl.fromTo(sub1, 
-          { opacity: 0, x: -14 }, 
-          { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" }, 
-          e1Start + 0.65
-        );
-
-        // ==============================================================
-        // ELEMENT 2 REVEAL SEQUENCE (Voiceover Event 2 at ~9.0s mark)
-        // Icon -> Big Text -> Small Text
-        // ==============================================================
-        const e2Start = p.e2.time;
-        tl.fromTo(icon2, 
-          { scale: 0, opacity: 0, rotate: 20 }, 
-          { scale: 1, opacity: 1, rotate: 0, duration: 0.5, ease: "back.out(1.8)" }, 
-          e2Start
-        );
-        tl.fromTo(svgStroke2, 
-          { strokeDasharray: 300, strokeDashoffset: 300 }, 
-          { strokeDashoffset: 0, duration: 0.85, ease: "power2.out" }, 
-          e2Start + 0.1
-        );
-        tl.fromTo(head2, 
-          { opacity: 0, y: 24, filter: "blur(6px)" }, 
-          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.55, ease: "power3.out" }, 
-          e2Start + 0.35
-        );
-        tl.fromTo(sub2, 
-          { opacity: 0, x: 14 }, 
-          { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" }, 
-          e2Start + 0.65
-        );
-
-        // ==============================================================
-        // 3RD ELEMENT: MASSIVE IMPACT STAMP SLAM (Last 3.5s)
-        // Heavy Ink Slam Overshoot
-        // ==============================================================
-        const stampStart = p.stamp.time;
-        tl.fromTo(stamp, 
-          { scale: 2.2, opacity: 0, rotate: -12 }, 
-          { scale: 1, opacity: 1, rotate: -3, duration: 0.55, ease: "back.out(2.5)" }, 
-          stampStart
-        );
-
       } else {
         const transStart = Math.max(0, t - 0.7);
         const prevNode = `#node-${i - 1}`;
         const arrow = `#arrow-${i}`;
-        const prevArrow = `#arrow-${i - 1}`;
-
-        // Previous node gently blurs and recedes
         tl.to(prevNode, { scale: 0.75, opacity: 0.08, filter: "blur(14px)", duration: 0.9, ease: "power2.inOut" }, transStart);
-
-        // Camera glides along infinite 2D canvas exactly on the beat
         tl.to("#canvas-world", { x: -p.x, y: -p.y, duration: 1.1, ease: "power3.inOut" }, transStart);
-
-        // Connector line draws bright
         tl.fromTo(arrow, { strokeDashoffset: 1800, opacity: 1 }, { strokeDashoffset: 0, opacity: 1, duration: 1.0, ease: "power2.out" }, transStart + 0.1);
-
-        // Current node enters focus from blur
         tl.fromTo(node, { scale: 0.85, opacity: 0.12, filter: "blur(12px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", z: 45, duration: 0.9, ease: "power2.out" }, transStart + 0.3);
-
-        // Fade previous connector line after node settles
-        tl.to(arrow, { opacity: 0.12, duration: 0.8, ease: "power2.inOut" }, t + 0.8);
-        if (i > 1) {
-          tl.to(prevArrow, { opacity: 0.06, duration: 0.5 }, transStart);
-        }
-
-        // Progressive Border
+        tl.to(arrow, { opacity: 0.12, duration: 0.8 }, t + 0.8);
         tl.fromTo(border, { strokeDashoffset: 2460 }, { strokeDashoffset: 0, duration: dur, ease: "linear" }, t);
-
-        // Year behind head reveals
-        tl.fromTo(`${node} .year-behind-head`, { y: -25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, t + 0.2);
-
-        // Background Landmark Cutout appears
-        tl.fromTo(bgLandmark, { scale: 0.92, opacity: 0, z: -10 }, { scale: 1, opacity: p.bgMeta.opacity, z: 10, duration: 0.7, ease: "power2.out" }, t + 0.35);
-
-        // Foreground President Cutout drops with weight
+        tl.fromTo(`${node} .year-behind-head`, { y: -25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, t + 0.2);
+        tl.fromTo(bgLandmark, { scale: 0.92, opacity: 0, z: -10 }, { scale: 1, opacity: p.bgMeta.opacity, z: 10, duration: 0.7 }, t + 0.35);
         tl.fromTo(cutout, { y: 40, scale: 0.92, opacity: 0, z: 40 }, { y: 0, scale: 1, opacity: 1, z: 85, duration: 0.75, ease: "back.out(1.4)" }, t + 0.65);
-
-        // Card Bottom Details illuminate
         tl.fromTo(details, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5 }, t + 0.95);
-
-        // Counter update
         tl.set("#counterIndicator", { textContent: `${String(i + 1).padStart(2, '0')} / 15` }, transStart + 0.6);
-
-        // ==============================================================
-        // ELEMENT 1 REVEAL (Voiceover Event 1 at ~3.0s)
-        // ==============================================================
-        const e1Start = t + p.e1.time;
-        tl.fromTo(icon1, 
-          { scale: 0, opacity: 0, rotate: -20 }, 
-          { scale: 1, opacity: 1, rotate: 0, duration: 0.5, ease: "back.out(1.8)" }, 
-          e1Start
-        );
-        tl.fromTo(svgStroke1, 
-          { strokeDasharray: 300, strokeDashoffset: 300 }, 
-          { strokeDashoffset: 0, duration: 0.85, ease: "power2.out" }, 
-          e1Start + 0.1
-        );
-        tl.fromTo(head1, 
-          { opacity: 0, y: 24, filter: "blur(6px)" }, 
-          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.55, ease: "power3.out" }, 
-          e1Start + 0.35
-        );
-        tl.fromTo(sub1, 
-          { opacity: 0, x: -14 }, 
-          { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" }, 
-          e1Start + 0.65
-        );
-
-        // ==============================================================
-        // ELEMENT 2 REVEAL (Voiceover Event 2 at ~9.0s mark)
-        // ==============================================================
-        const e2Start = t + p.e2.time;
-        tl.fromTo(icon2, 
-          { scale: 0, opacity: 0, rotate: 20 }, 
-          { scale: 1, opacity: 1, rotate: 0, duration: 0.5, ease: "back.out(1.8)" }, 
-          e2Start
-        );
-        tl.fromTo(svgStroke2, 
-          { strokeDasharray: 300, strokeDashoffset: 300 }, 
-          { strokeDashoffset: 0, duration: 0.85, ease: "power2.out" }, 
-          e2Start + 0.1
-        );
-        tl.fromTo(head2, 
-          { opacity: 0, y: 24, filter: "blur(6px)" }, 
-          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.55, ease: "power3.out" }, 
-          e2Start + 0.35
-        );
-        tl.fromTo(sub2, 
-          { opacity: 0, x: 14 }, 
-          { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" }, 
-          e2Start + 0.65
-        );
-
-        // ==============================================================
-        // 3RD ELEMENT: MASSIVE IMPACT STAMP SLAM (Last 3.5s)
-        // ==============================================================
-        const stampStart = t + p.stamp.time;
-        tl.fromTo(stamp, 
-          { scale: 2.2, opacity: 0, rotate: -12 }, 
-          { scale: 1, opacity: 1, rotate: -3, duration: 0.55, ease: "back.out(2.5)" }, 
-          stampStart
-        );
       }
 
-      // ⭐️ DRAMATIC 2.5D OPTICAL PARALLAX BETWEEN CENTER PNGs
-      // Background landmark drifts slowly in one direction:
+      // ==============================================================
+      // ELEMENT 1: ONE-BY-ONE STAGGERED CANVAS DRAWING (~3.0s)
+      // Each SVG part draws sequentially one after another, then Text!
+      // ==============================================================
+      const e1Start = t + p.e1.time;
+      tl.fromTo(parts1,
+        { opacity: 0, scale: 0.75, strokeDasharray: 500, strokeDashoffset: 500 },
+        { opacity: 1, scale: 1, strokeDashoffset: 0, duration: 0.55, stagger: 0.18, ease: "back.out(1.6)" },
+        e1Start
+      );
+      tl.fromTo(head1,
+        { opacity: 0, y: 22, filter: "blur(6px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power3.out" },
+        e1Start + 0.75
+      );
+      tl.fromTo(sub1,
+        { opacity: 0, x: -16 },
+        { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" },
+        e1Start + 1.05
+      );
+
+      // ==============================================================
+      // ELEMENT 2: ONE-BY-ONE STAGGERED CANVAS DRAWING (~9.0s)
+      // ==============================================================
+      const e2Start = t + p.e2.time;
+      tl.fromTo(parts2,
+        { opacity: 0, scale: 0.75, strokeDasharray: 500, strokeDashoffset: 500 },
+        { opacity: 1, scale: 1, strokeDashoffset: 0, duration: 0.55, stagger: 0.18, ease: "back.out(1.6)" },
+        e2Start
+      );
+      tl.fromTo(head2,
+        { opacity: 0, y: 22, filter: "blur(6px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power3.out" },
+        e2Start + 0.85
+      );
+      tl.fromTo(sub2,
+        { opacity: 0, x: 16 },
+        { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" },
+        e2Start + 1.15
+      );
+
+      // ==============================================================
+      // 3RD ELEMENT: STAMP SLAM
+      // ==============================================================
+      const stampStart = t + p.stamp.time;
+      tl.fromTo(stamp,
+        { scale: 2.2, opacity: 0, rotate: -12 },
+        { scale: 1, opacity: 1, rotate: -2.5, duration: 0.55, ease: "back.out(2.5)" },
+        stampStart
+      );
+
+      // 2.5D Optical Parallax on Center Portrait
       tl.to(bgLandmark, { x: -20, y: 12, scale: 1.05, duration: dur - 1.2, ease: "sine.inOut" }, t + 0.8);
-      // Foreground president cutout drifts faster in opposite direction:
       tl.to(cutout, { x: 24, y: -16, duration: dur - 1.2, ease: "sine.inOut" }, t + 0.8);
 
       timeOffset += dur;

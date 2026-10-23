@@ -1,14 +1,18 @@
 {
-  "name": "presidents-hyperframes",
+  "name": "presidents-of-india-hyperframes",
   "version": "1.0.0",
-  "type": "module",
+  "private": true,
   "scripts": {
-    "lint": "npx hyperframes lint",
-    "render": "npx hyperframes render index.html -o output/presidents_timeline.mp4",
-    "generate:voice": "node voice.js",
-    "generate:assets": "node generate-presidents-assets.js"
+    "preview": "hyperframes preview",
+    "lint": "hyperframes lint",
+    "check": "hyperframes check",
+    "render": "hyperframes render --output renders/presidents_of_india.mp4",
+    "render:draft": "hyperframes render --quality draft --output renders/draft.mp4",
+    "render:high": "hyperframes render --quality high --output renders/presidents_of_india.mp4"
   },
-  "devDependencies": {
-    "hyperframes": "latest"
+  "dependencies": {
+    "gsap": "^3.14.2",
+    "hyperframes": "latest",
+    "puppeteer-core": "^25.15.0"
   }
 }
